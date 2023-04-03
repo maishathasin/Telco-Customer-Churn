@@ -11,36 +11,34 @@ df = df.drop(columns=[
     "CustomerID", "Count", "Country", "State", "City", "Zip Code", "Lat Long",
     "Latitude", "Longitude", "Churn Label", "Churn Score", "CLTV",
     "Churn Reason",
-    "Total Charges" # Missing values, add back later
+    "Total Charges"  # Missing values, add back later?
 ])
 
-# Set types
-df = df.astype("category")
-df["Tenure Months"] = df["Tenure Months"].astype("int64")
-df["Monthly Charges"] = df["Monthly Charges"].astype("float64")
+# No need to change types to categorical, as one-hot encoding handles that
 
 # Isolate Features and Response
-X = df.drop(columns = ["Churn Value"])
+X = df.drop(columns=["Churn Value"])
 Y = df["Churn Value"]
 onehot_X = pd.get_dummies(X, drop_first=True)
 
-# k-fold CV
+# Split data
 n_splits = 5
 kf = model_selection.KFold(n_splits=n_splits, shuffle=True, random_state=441)
 
 # Create fold variables to store data
 FoldResults = namedtuple("FoldResults", [
-    "ccp_alphas", "impurities", "node_counts", "depth", 
+    "ccp_alphas", "impurities", "node_counts", "depth",
     "train_scores", "test_scores"
 ])
 folds = []
 
+# k-fold CV
 for train, test in kf.split(onehot_X):
     print("Testing...")
     X_train, X_test = onehot_X.iloc[train], onehot_X.iloc[test]
     y_train, y_test = Y.iloc[train], Y.iloc[test]
 
-    # Create Decision Tree
+    # Create Decision Tree, use Cost Complexity Pruning
     clf = tree.DecisionTreeClassifier(random_state=441)
     path = clf.cost_complexity_pruning_path(X_train, y_train)
     ccp_alphas, impurities = path.ccp_alphas[:-1], path.impurities[:-1]
@@ -48,7 +46,8 @@ for train, test in kf.split(onehot_X):
     # Train a DTree with each alpha
     clfs = []
     for ccp_alpha in ccp_alphas:
-        clf = tree.DecisionTreeClassifier(random_state=441, ccp_alpha=ccp_alpha)
+        clf = tree.DecisionTreeClassifier(
+            random_state=441, ccp_alpha=ccp_alpha)
         clf.fit(X_train, y_train)
         clfs.append(clf)
 
@@ -58,6 +57,7 @@ for train, test in kf.split(onehot_X):
     train_scores = [clf.score(X_train, y_train) for clf in clfs]
     test_scores = [clf.score(X_test, y_test) for clf in clfs]
 
+    # Save fold results
     folds.append(FoldResults(
         ccp_alphas, impurities, node_counts, depth, train_scores, test_scores
     ))
@@ -69,9 +69,10 @@ for i in range(n_splits):
         folds[i].ccp_alphas, folds[i].impurities, marker=",",
         label=f"Fold {i+1}", drawstyle="steps-post"
     )
-ax.set_xlabel("effective alpha")
-ax.set_ylabel("total impurity of leaves")
-ax.set_title("Total Impurity vs effective alpha for training set")
+ax.set_xlabel("Alpha")
+ax.set_ylabel("Total Impurity of Terminal Nodes")
+ax.set_title(f"Total Impurity vs Alpha for k={n_splits} Folds")
+ax.legend()
 
 # Graph number of nodes and depth vs alpha
 fig, ax = plt.subplots(2, 1)
@@ -80,27 +81,26 @@ for i in range(n_splits):
         folds[i].ccp_alphas, folds[i].node_counts, marker=",",
         label=f"Fold {i+1}", drawstyle="steps-post"
     )
-ax[0].set_xlabel("alpha")
-ax[0].set_ylabel("number of nodes")
-ax[0].set_title("Number of nodes vs alpha")
+ax[0].set_xlabel("Alpha")
+ax[0].set_ylabel("Number of Nodes")
+ax[0].set_title(f"Number of Nodes vs Alpha for k={n_splits} Folds")
+ax[0].legend()
 for i in range(n_splits):
     ax[1].plot(
         folds[i].ccp_alphas, folds[i].depth, marker=",",
         label=f"Fold {i+1}", drawstyle="steps-post"
     )
-ax[1].set_xlabel("alpha")
-ax[1].set_ylabel("depth of tree")
-ax[1].set_title("Depth vs alpha")
+ax[1].set_xlabel("Alpha")
+ax[1].set_ylabel("Depth")
+ax[1].set_title(f"Depth of Classification Tree vs Alpha for k={n_splits} Folds")
+ax[1].legend()
 fig.tight_layout()
 
-for i in range(n_splits):
-    print(folds[i].ccp_alphas[:10])
-
-# Graph accuracy vs alpha
+# Graph training accuracy vs alpha
 fig, ax = plt.subplots()
-ax.set_xlabel("alpha")
-ax.set_ylabel("accuracy")
-ax.set_title("Accuracy vs alpha for training sets")
+ax.set_xlabel("Alpha")
+ax.set_ylabel("Accuracy")
+ax.set_title("Training Accuracy vs Alpha for k=5 Folds")
 for i in range(n_splits):
     ax.plot(
         folds[i].ccp_alphas, folds[i].train_scores, marker=",",
@@ -108,10 +108,11 @@ for i in range(n_splits):
     )
 ax.legend()
 
+# Graph testing accuracy vs alpha
 fig, ax = plt.subplots()
-ax.set_xlabel("alpha")
-ax.set_ylabel("accuracy")
-ax.set_title("Accuracy vs alpha for testing sets")
+ax.set_xlabel("Alpha")
+ax.set_ylabel("Accuracy")
+ax.set_title(f"Testing Accuracy vs Alpha for k={n_splits} Folds")
 for i in range(n_splits):
     ax.plot(
         folds[i].ccp_alphas, folds[i].test_scores, marker=",",
@@ -119,6 +120,7 @@ for i in range(n_splits):
     )
 ax.legend()
 
+# Compute average testing accuracy for all alphas
 all_alphas = sorted(set(
     sum([list(folds[i].ccp_alphas) for i in range(n_splits)], [])
 ))
@@ -135,19 +137,22 @@ for alpha in all_alphas:
                 break
         a_sum += folds[i].test_scores[a_ind[i]]
     avg_test_scores.append(a_sum/n_splits)
-        
+
+# Graph average testing accuracy vs alpha
 fig, ax = plt.subplots()
-ax.set_xlabel("alpha")
-ax.set_ylabel("accuracy")
-ax.set_title("Average Accuracy vs alpha for testing sets")
+ax.set_xlabel("Alpha")
+ax.set_ylabel("Accuracy")
+ax.set_title(f"Average Accuracy vs Alpha for k={n_splits} Testing Sets")
 ax.plot(
     all_alphas, avg_test_scores, marker=".", drawstyle="steps-post"
 )
-ax.legend()
 
+# Show all plots
 plt.show()
 
-# max_test = max(test_scores)
-# where_max = test_scores.index(max_test)
-# best_alpha = ccp_alphas[where_max]
-# print(max_test, where_max, best_alpha)
+# Compute best alpha
+max_test = max(avg_test_scores)
+where_max = avg_test_scores.index(max_test)
+best_alpha = all_alphas[where_max]
+print(max_test, where_max, best_alpha)
+# Out: 0.79894862168527 1265 0.0006430489816063728
