@@ -64,8 +64,18 @@ We can produce 5 metrics for each of the folds as a function of the cost complex
 `\hspace{3cm}`{=latex} ![](Figure_1.png){width=245px} ![](Figure_2.png){width=245px}
 ![](Figure_3.png){width=245px} ![](Figure_4.png){width=245px} ![](Figure_5.png){width=245px}
 
-Our second model is a simple SVM that uses 90% of the pre-processed dataset to train the SVM classifier from scikit-learn. We fit the model on 4 different hyperparameters; default hyperparameters, Regularization parameter = 100, Regularization parameter = 100 and Kernel = polynomial, and a final model with Regularization parameter = 100 and Kernel = sigmoid. 
-We then used this model to predict on our test dataset and predicted a model accuracy to 0.76, 0.80, 0.76 and 0.63 respectively.
+Our second model is a simple SVM that uses 90% of the pre-processed dataset to train the SVM classifier from scikit-learn. We fit the model on 4 different SVM models with different hyperparamters
+```{r table2, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+tabl <- "
+| Tables        | Regulization parameter | Kernal  | accuracy|
+|---------------|:-------------:|------:|------:|
+| SVM 1      | default | None | 0.7585|
+| SVM 2      | 100      |   None | 0.8011|
+| SVM 3 | 100      |    polynomial | 0.7585|
+| SVM 4 | 100      |    sigmoid | 0.6264|
+"
+cat(tabl) # output the table in a format good for HTML/PDF/docx conversion
+```
 
 \newpage
 # Appendix
