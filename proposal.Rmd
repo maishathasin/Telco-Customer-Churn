@@ -83,10 +83,10 @@ cat(tabl) # output the table in a format good for HTML/PDF/docx conversion
 Our dataset is also popular on Kaggle. The following link shows 21 other analyses of the same dataset: <https://www.kaggle.com/datasets/yeanzc/telco-customer-churn-ibm-dataset/code>
 The vast majority of these analyses are plug-and-play, where default classifiers are run on the dataset, and then the results are analyzed and visualized in many ways.
 Most of the analyses use at least one of Logistic Regression, Naive Bayes, Random Forest, or XGBoost, and most of the hyperparameters are tuned using out of the box tools. Only one analysis used (explicit) cross-validation at all.
+
 Our methods will heavily use cross-validation where possible (for the simpler models), and we are planning to implement more complex models such as Neural Networks and KNN. Additionally, we are planning to compare the predictive power across all of our models, taking into account the complexity and computational requirements for each model.
 
-## Code
-Below is the code for the Decision Tree shown above. 
+## Decision Tree Code
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
 from collections import namedtuple
 
@@ -248,7 +248,7 @@ print(max_test, where_max, best_alpha)
 # Out: 0.79894862168527 1265 0.0006430489816063728
 ```
 
-Below is the code for the SVM described above.
+## SVM Code
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -298,25 +298,25 @@ X_train.shape, X_test.shape
 svc=SVC() 
 svc.fit(X_train,y_train)
 y_pred=svc.predict(X_test)
-print('Model accuracy score with default hyperparameters:
+print('Model accuracy score with default hyperparameters: \
  {0:0.4f}'. format(accuracy_score(y_test, y_pred)))
 
 svc=SVC(C=100)
 svc.fit(X_train,y_train)
 y_pred=svc.predict(X_test)
-print('Model accuracy score with C = 100:
+print('Model accuracy score with C = 100: \
  {0:0.4f}'. format(accuracy_score(y_test, y_pred)))
 
 svc=SVC(kernel='poly',C=100)
 svc.fit(X_train,y_train)
 y_pred = svc.predict(X_test)
-print('Model accuracy score with C = 100: 
+print('Model accuracy score with C = 100: \
 {0:0.4f} and polynomial kernal'. format(accuracy_score(y_test, y_pred)))
 
 svc=SVC(kernel='sigmoid',C=100)
 svc.fit(X_train,y_train)
 y_pred=svc.predict(X_test)
-print('Model accuracy score with C = 100:
+print('Model accuracy score with C = 100: \
  {0:0.4f} and sigmoid kernal'. format(accuracy_score(y_test, y_pred)))
 
 
