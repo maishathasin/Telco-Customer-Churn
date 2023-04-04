@@ -258,7 +258,9 @@ df['Churn Label'].value_counts()/np.float(len(df))
 
 dd  = df.loc[df['TotalCharges'] != ' '] # removing rows with no total charges
 dd['TotalCharges'] = dd['TotalCharges'].astype('float')
-X = dd.drop(['ChurnLabel','CustomerID','Count','Country','State','City','ZipCode','LatLong','Latitude','Longitude','ChurnValue','ChurnScore','CLTV','ChurnReason'], axis=1)
+X = dd.drop(['ChurnLabel','CustomerID','Count','Country','State','City',
+'ZipCode','LatLong','Latitude','Longitude',
+'ChurnValue','ChurnScore','CLTV','ChurnReason'], axis=1)
 #one hot encoding
 dd['ChurnLabel'] = dd['ChurnLabel'].replace(to_replace = ['Yes','No'],value = ['1','0'])
 X = pd.get_dummies(X)
@@ -277,22 +279,26 @@ X_train.shape, X_test.shape
 svc=SVC() 
 svc.fit(X_train,y_train)
 y_pred=svc.predict(X_test)
-print('Model accuracy score with default hyperparameters: {0:0.4f}'. format(accuracy_score(y_test, y_pred)))
+print('Model accuracy score with default hyperparameters:
+ {0:0.4f}'. format(accuracy_score(y_test, y_pred)))
 
 svc=SVC(C=100)
 svc.fit(X_train,y_train)
 y_pred=svc.predict(X_test)
-print('Model accuracy score with C = 100: {0:0.4f}'. format(accuracy_score(y_test, y_pred)))
+print('Model accuracy score with C = 100:
+ {0:0.4f}'. format(accuracy_score(y_test, y_pred)))
 
 svc=SVC(kernel='poly',C=100)
 svc.fit(X_train,y_train)
 y_pred = svc.predict(X_test)
-print('Model accuracy score with C = 100: {0:0.4f} and polynomial kernal'. format(accuracy_score(y_test, y_pred)))
+print('Model accuracy score with C = 100: 
+{0:0.4f} and polynomial kernal'. format(accuracy_score(y_test, y_pred)))
 
 svc=SVC(kernel='sigmoid',C=100)
 svc.fit(X_train,y_train)
 y_pred=svc.predict(X_test)
-print('Model accuracy score with C = 100: {0:0.4f} and sigmoid kernal'. format(accuracy_score(y_test, y_pred)))
+print('Model accuracy score with C = 100:
+ {0:0.4f} and sigmoid kernal'. format(accuracy_score(y_test, y_pred)))
 
 
 #Model accuracy score with default hyperparameters: 0.7585
