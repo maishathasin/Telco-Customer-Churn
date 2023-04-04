@@ -67,7 +67,7 @@ We can produce 5 metrics for each of the folds as a function of the cost complex
 Our second model is a simple SVM that uses 90% of the pre-processed dataset to train the SVM classifier from scikit-learn. We fit the model on 4 different SVM models with different hyperparameters:
 ```{r table2, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
 tabl <- "
-| Tables        | Regulization parameter | Kernal  | accuracy|
+| Models        | Regulization parameter | Kernal  | accuracy|
 |---------------|:-------------:|------:|------:|
 | SVM 1      | default | None | 0.7585|
 | SVM 2      | 100      |   None | 0.8011|
