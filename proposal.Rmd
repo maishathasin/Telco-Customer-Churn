@@ -14,14 +14,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Dataset
-
 The Telco Customer Churn datset, provided by IBM, contains information about a fictional telecommunications (telco) company which provided home phone and internet services to 7043 customers. The dataset provides demographic and business-related metrics for each customer, as well as identifying whether the customer switched providers (customer churn).
 
 The dataset can be downloaded from the following link: <https://accelerator.ca.analytics.ibm.com/bi/?perspective=authoring&pathRef=.public_folders%2FIBM%2BAccelerator%2BCatalog%2FContent%2FDAT00067>
 
 The dataset contains **33** variables for **7043** observations, but not all variables are fit to be predictive features. We removed columns relating to unique IDs, geographical information, and dashboarding aggregation, as well as "duplicate" columns (those that are identical to another column except for formatting), and columns related to the response (such as the churn reason and predicted lifetime value to the company).
 
-We are then left with 19 features: Gender, Senior Citizen, Partner, Dependents, Tenure Months (integer/numeric), Phone Service, Multiple Lines, Internet Service, Online Security, Online Backup, Device Protection Plan, Tech Support, Streaming TV, Streaming Movies, Contract, Paperless Billing, Payment method, Monthly Charge (float/numeric), and Total Charges (float/numeric). Each feature is categorical except those specified otherwise. The descriptions of the features can be found at <https://community.ibm.com/community/user/businessanalytics/blogs/steven-macko/2019/07/11/telco-customer-churn-1113>.
+We are then left with **19** features: Gender, Senior Citizen, Partner, Dependents, Tenure Months (integer/numeric), Phone Service, Multiple Lines, Internet Service, Online Security, Online Backup, Device Protection Plan, Tech Support, Streaming TV, Streaming Movies, Contract, Paperless Billing, Payment method, Monthly Charge (float/numeric), and Total Charges (float/numeric). Each feature is categorical except those specified otherwise. The descriptions of the features can be found at <https://community.ibm.com/community/user/businessanalytics/blogs/steven-macko/2019/07/11/telco-customer-churn-1113>.
 
 Finally, the response variable is Churn Value, binary on whether the customer left the company this quarter.
 
@@ -46,7 +45,7 @@ We would like to compare the predictive accuracy of the more complex/computation
 
 3. **Random Forests**: This is an ensemble learning algorithm that creates multiple decision trees (as above) and aggregates their predictions. We will use scikit-learn to build our implementation. We can tune parameters like the number of trees in the forest, the maximum depth of the trees, and the number of features considered for each split.
 
-4. **Support Vector Machines (SVMs)**: SVMs are particularly useful when the number of features is high relative to the number of observations, as they can handle high-dimensional data well. They try to find a hyperplane that separates the churners from the non-churners. SVMs are implemented in libraries such as scikit-learn in Python with the SVC class . We can tune parameters like the kernel type, the regularization parameter, and the kernel coefficient. With our EDA we can figure out if there is a higher number of outliers and use hard or soft margins, since we have a lot of features SVM is a good choice. The SVC class takes several parameters, including the type of kernel to use (linear, polynomial), the regularization parameter (C), and the kernel coefficient (gamma for RBF kernel, degree for polynomial kernel)
+4. **Support Vector Machines (SVMs)**: SVMs are particularly useful when the number of features is high relative to the number of observations, as they can handle high-dimensional data well. They try to find a hyperplane that separates the churners from the non-churners. SVMs are implemented in libraries such as scikit-learn in Python with the SVC class . We can tune parameters like the kernel type, the regularization parameter, and the kernel coefficient. With our EDA we can figure out if there is a higher number of outliers and use hard or soft margins, since we have a lot of features SVM is a good choice. The SVC class takes several parameters, including the type of kernel to use (linear, polynomial), the regularization parameter (C), and the kernel coefficient (gamma for RBF kernel, degree for polynomial kernel).
 
 5. **K-Nearest Neighbors (KNN)**: This is a non-parametric algorithm that classifies a new data point based on the k-nearest points in the training data. KNN is implemented in libraries such as scikit-learn in Python and we can use k-fold cross validation to calculate the best ‘k’. We can tune parameters like the number of neighbors (k) and the distance metric.
 
@@ -62,11 +61,18 @@ Our first model is a Decision Tree (aka Classification Tree), built using Recurs
 We can produce 5 metrics for each of the folds as a function of the cost complexity parameter alpha: the total impurity of leaf/terminal nodes, the number of nodes in the tree, the depth of the tree, the training accuracy, and the testing accuracy. Finally, we can also produce the average testing accuracy across the 5 folds.
 ![](Figure_1.png){width=360px} ![](Figure_2.png){width=360px}
 ![](Figure_3.png){width=245px} ![](Figure_4.png){width=245px} ![](Figure_5.png){width=245px}
-Our second model is a simple SVM that uses 90% of the pre-processed dataset to train the SVM classifier from scikit-learn. We fit the model on 4 different hyperparameters; default hyperparameters, Regularization parameter = 100, Regularization parameter = 100 and Kernel = polynomial, and another model with Regularization parameter = 100 and Kernel = sigmoid. 
+Our second model is a simple SVM that uses 90% of the pre-processed dataset to train the SVM classifier from scikit-learn. We fit the model on 4 different hyperparameters; default hyperparameters, Regularization parameter = 100, Regularization parameter = 100 and Kernel = polynomial, and a final model with Regularization parameter = 100 and Kernel = sigmoid. 
 We then used this model to predict on our test dataset and predicted a model accuracy to 0.76, 0.80, 0.76 and 0.63 respectively.
 
 \newpage
 # Appendix
+## Other Analyses on the same dataset
+Our dataset is also popular on Kaggle. The following link shows 21 other analyses of the same dataset: <https://www.kaggle.com/datasets/yeanzc/telco-customer-churn-ibm-dataset/code>
+The vast majority of these analyses are plug-and-play, where default classifiers are run on the dataset, and then the results are analyzed and visualized in many ways.
+Most of the analyses use at least one of Logistic Regression, Naive Bayes, Random Forest, or XGBoost, and most of the hyperparameters are tuned using out of the box tools. Only one analysis used (explicit) cross-validation at all.
+Our methods will heavily use cross-validation where possible (for the simpler models), and we are planning to implement more complex models such as Neural Networks and KNN. Additionally, we are planning to compare the predictive power across all of our models, taking into account the complexity and computational requirements for each model.
+
+## Code
 Below is the code for the Decision Tree shown above. 
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
 from collections import namedtuple
@@ -229,7 +235,7 @@ print(max_test, where_max, best_alpha)
 # Out: 0.79894862168527 1265 0.0006430489816063728
 ```
 
-Below is the code for SVM
+Below is the code for the SVM described above.
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -300,4 +306,3 @@ print('Model accuracy score with C = 100: {0:0.4f} and sigmoid kernal'. format(a
 #Model accuracy score with C = 100: 0.7585 and polynomial kernal
 #Model accuracy score with C = 100: 0.6264 and sigmoid kernal
 ```
-
