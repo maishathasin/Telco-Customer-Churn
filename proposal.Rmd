@@ -13,7 +13,7 @@ urlcolor: blue
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Dataset
+# Dataset
 
 The Telco Customer Churn datset, provided by IBM, contains information about a fictional telecommunications (telco) company which provided home phone and internet services to 7043 customers. The dataset provides demographic and business-related metrics for each customer, as well as identifying whether the customer switched providers (customer churn).
 
@@ -21,19 +21,23 @@ The dataset can be downloaded from the following link: <https://accelerator.ca.a
 
 The dataset contains 33 variables for 7043 observations, but not all variables are fit to be predictive features. We removed columns relating to unique IDs, geographical information, and dashboarding aggregation, as well as "duplicate" columns (those that are identical to another column except for formatting), and columns related to the response (such as the churn reason and predicted lifetime value to the company).
 
-We are then left with 19 features: Gender, Senior Citizen, Partner, Dependents, Tenure Months, Phone Service, Multiple Lines, Internet Service, Online Security, Online Backup, Device Protection Plan, Tech Support, Streaming TV, Streaming Movies, Contract, Paperless Billing, Payment method, Monthly Charge, and Total Charges. Each feature is categorical except Tenure, which is (integer) numeric, and Monthly Charge/Total Charges, which are (float) numeric. The descriptions of the features can be found at <https://community.ibm.com/community/user/businessanalytics/blogs/steven-macko/2019/07/11/telco-customer-churn-1113>.
+We are then left with 19 features: Gender, Senior Citizen, Partner, Dependents, Tenure Months (integer/numeric), Phone Service, Multiple Lines, Internet Service, Online Security, Online Backup, Device Protection Plan, Tech Support, Streaming TV, Streaming Movies, Contract, Paperless Billing, Payment method, Monthly Charge (float/numeric), and Total Charges (float/numeric). Each feature is categorical except those specified otherwise. The descriptions of the features can be found at <https://community.ibm.com/community/user/businessanalytics/blogs/steven-macko/2019/07/11/telco-customer-churn-1113>.
 
 Finally, the response variable is Churn Value, binary on whether the customer left the company this quarter.
 
-## Exploratory Data Analysis
+# Exploratory Data Analysis
 We started out with some EDA to understand the data before applying any machine learning techniques.
 We noticed that the data is imbalanced; 73% of the data is labelled as No whereas 27% is labelled Yes, so we might have to choose our resampling methods to ensure that our training data is not biased.
+
 ![](EDA_images/EDA_Figure_1.png)
+
 Notice from the graph that there is a clear relationship between Senior citizens = Yes and the total charges they have. Senior citizens seem to be paying extra than non senior citizens, and customers that tend to pay by mailed check pay less than those who do bank transfers.
+
 ![](EDA_images/EDA_Figure_2.png)
+
 Furthermore, from our Boxplots and distribution we notice that the underlying charges are not distributed uniformly. And the total charges, although calculated with the monthly charges, do not have exactly the same distributions and are more left skewed than the Monthly charges. This may be the result of new customers who have not yet had multiple monthly charges for their total (quarterly) charge.
 
-## Classification Methods
+# Classification Methods
 We would like to compare the predictive accuracy of the more complex/computationally intensive models with the predictive accuracy of the more straightforward/computationally simple models. We plan to set aside some of the dataset as “new data” for this purpose; all of the models will train on the same subset of the dataset (called the visible data) and never see the “new data”. This way, we have a fair comparison of predictive power across all of the different models.
 
 1. Logistic Regression: This is a widely used linear regression model for binary classification problems and it is less prone to overfitting. We will use scikit-learn to build our implementation. To calibrate the model, we can tune the regularization parameter using cross-validation.
@@ -46,8 +50,8 @@ We would like to compare the predictive accuracy of the more complex/computation
 After testing multiple models for accuracy, the next step is to select the best model based on its performance on the validation set. The validation set is used to estimate the performance of each model on unseen data, which is a better estimate of the model's true performance than the training set.
 Once the best model has been selected, we will retrain the model on the entire (visible) dataset to get maximum predictive performance.
 
-## Preliminary Results
-For our preliminary results, we fit two different models which we will use two of the computationally simple models to compare against.
+# Preliminary Results
+For our preliminary results, we fit two different models which we will use two of the computationally simple models to compare against. We used one-hot encoding to encode the categorical features, where each category except the baseline becomes a new binary feature.
 Our first model is a Decision Tree (aka Classification Tree), built using Recursive Binary Splitting on the entire dataset. Then we used Cost Complexity Pruning and k-fold cross-validation (with k=5) to find the optimal value for alpha which defines a subtree.
 We can produce 5 metrics for each of the folds as a function of the cost complexity parameter alpha: the total impurity of leaf/terminal nodes, the number of nodes in the tree, the depth of the tree, the training accuracy, and the testing accuracy. Finally, we can also produce the average testing accuracy across the 5 folds.
 ![](Figure_1.png){width=360px} ![](Figure_2.png){width=360px}
@@ -56,7 +60,7 @@ Our second model is a simple SVM that uses 90% of the pre-processed dataset to t
 We then used this model to predict on our test dataset and predicted a model accuracy to 0.76, 0.80, 0.76 and 0.63 respectively.
 
 \newpage
-## Appendix
+# Appendix
 Below is the code for the Decision Tree shown above. 
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
 from collections import namedtuple
