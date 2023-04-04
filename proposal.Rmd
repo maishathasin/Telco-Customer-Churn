@@ -64,7 +64,7 @@ We can produce 5 metrics for each of the folds as a function of the cost complex
 `\hspace{3cm}`{=latex} ![](Figure_1.png){width=245px} ![](Figure_2.png){width=245px}
 ![](Figure_3.png){width=245px} ![](Figure_4.png){width=245px} ![](Figure_5.png){width=245px}
 
-Our second model is a simple SVM that uses 90% of the pre-processed dataset to train the SVM classifier from scikit-learn. We fit the model on 4 different SVM models with different hyperparamters
+Our second model is a simple SVM that uses 90% of the pre-processed dataset to train the SVM classifier from scikit-learn. We fit the model on 4 different SVM models with different hyperparameters:
 ```{r table2, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
 tabl <- "
 | Tables        | Regulization parameter | Kernal  | accuracy|
