@@ -5,7 +5,7 @@ date: "Winter 2023"
 output: 
   pdf_document:
     md_extensions: +hard_line_breaks
-geometry: margin=2cm
+geometry: margin=1.5cm
 urlcolor: blue
 ---
 
@@ -50,5 +50,9 @@ Finally, the response variable:
 ## Classification Methods
 
 ## Preliminary Results
+
+![](Figure_1.png){width=360px} ![](Figure_2.png){width=360px}
+
+![](Figure_3.png){width=245px} ![](Figure_4.png){width=245px} ![](Figure_5.png){width=245px}
 
 ## Appendix
