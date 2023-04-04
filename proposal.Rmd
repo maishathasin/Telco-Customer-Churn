@@ -1,5 +1,6 @@
 ---
-title: "STAT 441 Project Proposal"
+title: > 
+  `\vspace{-1.5cm}`{=latex} STAT 441 Project Proposal
 author: "Maisha Thasin, Joseph Wang (Group 25, undergraduate)"
 date: "Winter 2023"
 output: 
@@ -32,9 +33,9 @@ We noticed that the data is imbalanced; **73%** of the data is labelled as No wh
 
 Notice from the graph that there is a clear relationship between Senior citizens = Yes and the total charges they have. Senior citizens seem to be paying extra than non senior citizens, and customers that tend to pay by mailed check pay less than those who do bank transfers.
 
-![](EDA_images/EDA_Figure_2.png)
-
 Furthermore, from our Boxplots and distribution we notice that the underlying charges are not distributed uniformly. And the total charges, although calculated with the monthly charges, do not have exactly the same distributions and are more left skewed than the Monthly charges. This may be the result of new customers who have not yet had multiple monthly charges for their total (quarterly) charge.
+
+![](EDA_images/EDA_Figure_2.png)
 
 # Classification Methods
 We would like to compare the predictive accuracy of the more complex/computationally intensive models with the predictive accuracy of the more straightforward/computationally simple models. We plan to set aside some of the dataset as “new data” for this purpose; all of the models will train on the same subset of the dataset (called the visible data) and never see the “new data”. This way, we have a fair comparison of predictive power across all of the different models.
@@ -59,8 +60,10 @@ For our preliminary results, we fit two different models which we will use two o
 
 Our first model is a Decision Tree (aka Classification Tree), built using Recursive Binary Splitting on the entire dataset. Then we used Cost Complexity Pruning and k-fold cross-validation (with k=5) to find the optimal value for alpha which defines a subtree.
 We can produce 5 metrics for each of the folds as a function of the cost complexity parameter alpha: the total impurity of leaf/terminal nodes, the number of nodes in the tree, the depth of the tree, the training accuracy, and the testing accuracy. Finally, we can also produce the average testing accuracy across the 5 folds.
-![](Figure_1.png){width=360px} ![](Figure_2.png){width=360px}
+
+`\hspace{3cm}`{=latex} ![](Figure_1.png){width=245px} ![](Figure_2.png){width=245px}
 ![](Figure_3.png){width=245px} ![](Figure_4.png){width=245px} ![](Figure_5.png){width=245px}
+
 Our second model is a simple SVM that uses 90% of the pre-processed dataset to train the SVM classifier from scikit-learn. We fit the model on 4 different hyperparameters; default hyperparameters, Regularization parameter = 100, Regularization parameter = 100 and Kernel = polynomial, and a final model with Regularization parameter = 100 and Kernel = sigmoid. 
 We then used this model to predict on our test dataset and predicted a model accuracy to 0.76, 0.80, 0.76 and 0.63 respectively.
 
