@@ -1,0 +1,27 @@
+---
+title: > 
+  `\vspace{-1.5cm}`{=latex} STAT 441 Project Final Report
+author: "Maisha Thasin, Joseph Wang (Group 25, undergraduate)"
+date: "Winter 2023"
+output: 
+  pdf_document:
+    md_extensions: +hard_line_breaks
+geometry: margin=1.5cm
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Summary
+
+# Introduction
+
+# Methods
+
+# Results
+
+# Discussion
+
+# Appendix
