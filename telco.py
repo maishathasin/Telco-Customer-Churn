@@ -18,7 +18,7 @@ class Dataset:
         ], inplace=True)
 
         # Remove rows with empty values
-        df = df.loc[df["Total Charges"].strip() != ""]
+        df = df.loc[df["Total Charges"].str.strip() != ""]
 
         # Isolate Features and Response
         X = df.drop(columns=["Churn Value"])
@@ -33,13 +33,13 @@ class Dataset:
             X, onehot_X, Y, test_size=0.1, random_state=441
         ))
 
-    def get_visible_set(self, onehot=False):
+    def get_training_set(self, onehot=False):
         if onehot:
             return self._data.ohX, self._data.y
         else:
             return self._data.X, self._data.y
 
-    def get_evaluation_set(self, onehot=False):
+    def get_testing_set(self, onehot=False):
         if onehot:
             return self._data.ohX_eval
         else:
