@@ -19,11 +19,12 @@ class Dataset:
 
         # Remove rows with empty values
         df = df.loc[df["Total Charges"].str.strip() != ""]
+        df['Total Charges'] = df['Total Charges'].astype('float')
 
         # Isolate Features and Response
         X = df.drop(columns=["Churn Value"])
         Y = df["Churn Value"]
-        onehot_X = pd.get_dummies(X, drop_first=True)
+        onehot_X = pd.get_dummies(X)
 
         # Remove evaluation set
         SplitData = namedtuple("SplitData", [
