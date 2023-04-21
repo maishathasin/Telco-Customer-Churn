@@ -9,7 +9,7 @@ from telco import Dataset
 def calibrate(ds: Dataset, n_splits=5, silent=True):
     """
     Given a Dataset, returns the value of alpha which maximizes the expected
-    testing accuracy for a Decision Tree.
+    testing accuracy for a Decision Tree using k-fold CV.
     """
     # Get data, split into k=nsplits folds
     X, Y = ds.get_training_set()
@@ -82,7 +82,10 @@ def calibrate(ds: Dataset, n_splits=5, silent=True):
     return best_alpha
 
 
-def create_tree(load=False, smote=False):
+def create_tree(load=False, smote=False, save=False):
+    """
+    Given a dataset, tunes or loads a single Decision Tree.
+    """
     ds = Dataset(onehot=True, smote=smote)
 
     if not load:
@@ -103,6 +106,9 @@ def create_tree(load=False, smote=False):
 
     print(clf.get_n_leaves())
     print(clf.get_depth())
+
+    if save:
+        ds.save_predictions("dtree", y_pred)
 
     # 0.8097, 0.5786 (smote=False)
     # 0.8239, 0.6457 (smote=True)
