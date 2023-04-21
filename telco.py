@@ -93,3 +93,8 @@ class Dataset:
 
     def f1(self, y_pred):
         return f1_score(self.y_test, y_pred)
+
+    def save_predictions(filename, y_pred):
+        pd.DataFrame(y_pred, columns=["y_pred"]) \
+            .to_csv(f"{filename}.csv", index=False)
+
