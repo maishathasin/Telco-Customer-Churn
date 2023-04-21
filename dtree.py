@@ -6,13 +6,13 @@ from sklearn.tree import DecisionTreeClassifier
 from telco import Dataset
 
 
-def calibrate(ds, n_splits=5, silent=True):
+def calibrate(ds: Dataset, n_splits=5, silent=True):
     """
     Given a Dataset, returns the value of alpha which maximizes the expected
     testing accuracy for a Decision Tree.
     """
     # Get data, split into k=nsplits folds
-    X, Y = ds.get_training_set(onehot=True)
+    X, Y = ds.get_training_set()
     kf = KFold(n_splits=n_splits, shuffle=True, random_state=441)
 
     # Store fold results
@@ -82,16 +82,31 @@ def calibrate(ds, n_splits=5, silent=True):
     return best_alpha
 
 
-def create_tree():
-    ds = Dataset()
-    # alpha = calibrate(ds, silent=False)
-    alpha = 0.0008120482377403301
+def create_tree(load=False, smote=False):
+    ds = Dataset(onehot=True, smote=smote)
+
+    if not load:
+        # Tune hyperparameter alpha using k-fold CV
+        alpha = calibrate(ds, silent=False)
+    elif smote:
+        # Load tuned value for smote=True
+        alpha = 0.0008973247358753291
+    else:
+        # Load tuned value for smote=False
+        alpha = 0.0007307378011487363
+
     clf = DecisionTreeClassifier(random_state=441, ccp_alpha=alpha)
-    clf.fit(*ds.get_training_set(onehot=True))
-    y_pred = clf.predict(ds.get_testing_set(onehot=True))
+    clf.fit(*ds.get_training_set())
+    y_pred = clf.predict(ds.get_testing_set())
     acc = ds.accuracy(y_pred)
-    # 81.7%
-    return acc
+    f1 = ds.f1(y_pred)
+
+    print(clf.get_n_leaves())
+    print(clf.get_depth())
+
+    # 0.8097, 0.5786 (smote=False)
+    # 0.8239, 0.6457 (smote=True)
+    return (round(acc, 4), round(f1, 4))
 
 
-print(create_tree())
+print(create_tree(load=False, smote=True))
