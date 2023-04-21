@@ -1,14 +1,19 @@
-from collections import namedtuple
-
-from sklearn.metrics import accuracy_score
+from imblearn.over_sampling import SMOTENC
+from imblearn.under_sampling import RandomUnderSampler
+from imblearn.pipeline import make_pipeline
+from sklearn.compose import make_column_transformer
+from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 import pandas as pd
 
 
 class Dataset:
-    def __init__(self, excel="Telco_customer_churn.xlsx"):
+    def __init__(self, excel="Telco_customer_churn.xlsx", onehot=False,
+                 scale=False, smote=False):
         # Load data
         df = pd.read_excel(excel)
+        self.scaler = MinMaxScaler()
 
         # Remove unrelated columns
         df.drop(columns=[
@@ -20,30 +25,71 @@ class Dataset:
         # Remove rows with empty values
         df = df.loc[df["Total Charges"].str.strip() != ""]
 
+        # Numeric columns
+        num_cols = {
+            "Tenure Months": int,
+            "Monthly Charges": float,
+            "Total Charges": float
+        }
+        df = df.astype(num_cols)
+
         # Isolate Features and Response
         X = df.drop(columns=["Churn Value"])
         Y = df["Churn Value"]
-        onehot_X = pd.get_dummies(X, drop_first=True)
 
-        # Remove evaluation set
-        SplitData = namedtuple("SplitData", [
-            "X", "X_eval", "ohX", "ohX_eval", "y", "y_eval"
-        ])
-        self._data = SplitData(*train_test_split(
-            X, onehot_X, Y, test_size=0.1, random_state=441
-        ))
+        # Train/test split
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
+            X, Y, test_size=0.1, random_state=441
+        )
 
-    def get_training_set(self, onehot=False):
+        # SMOTE (Synthetic Minority Over-sampling TEchnique)
+        if smote:
+            cat_mask = [not col in num_cols for col in X.columns]
+            pipeline = make_pipeline(
+                SMOTENC(cat_mask, sampling_strategy=0.5, random_state=441),
+                RandomUnderSampler(sampling_strategy=0.5, random_state=441)
+            )
+            self.X_train, self.y_train = pipeline.fit_resample(
+                self.X_train, self.y_train
+            )
+
+        # One-hot encoding
         if onehot:
-            return self._data.ohX, self._data.y
-        else:
-            return self._data.X, self._data.y
+            self.X_train = pd.get_dummies(self.X_train, drop_first=True)
+            self.X_test = pd.get_dummies(self.X_test, drop_first=True)
+            # cat_cols = [col for col in X.columns if col not in num_cols]
+            # transformer = make_column_transformer(
+            #     (OneHotEncoder(drop='if_binary'), cat_cols),
+            #     remainder='passthrough'
+            # )
+            # self.X_train = pd.DataFrame(
+            #     transformer.fit_transform(self.X_train),
+            #     columns=transformer.get_feature_names_out()
+            # )
+            # self.X_test = pd.DataFrame(
+            #     transformer.fit_transform(self.X_test),
+            #     columns=transformer.get_feature_names_out()
+            # )
 
-    def get_testing_set(self, onehot=False):
-        if onehot:
-            return self._data.ohX_eval
-        else:
-            return self._data.X_eval
+        # Scale numeric columns to [0, 1]
+        if scale:
+            num_col_names = list(num_cols.keys())
+            self.X_train[num_col_names] = self.scaler.fit_transform(
+                self.X_train[num_col_names]
+            )
+            self.X_test[num_col_names] = self.scaler.fit_transform(
+                self.X_test[num_col_names]
+            )
+        
+
+    def get_training_set(self):
+        return self.X_train, self.y_train
+
+    def get_testing_set(self):
+        return self.X_test
 
     def accuracy(self, y_pred):
-        return accuracy_score(self._data.y_eval, y_pred)
+        return accuracy_score(self.y_test, y_pred)
+
+    def f1(self, y_pred):
+        return f1_score(self.y_test, y_pred)
