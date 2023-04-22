@@ -9,6 +9,10 @@ import pandas as pd
 
 
 class Dataset:
+    """
+    Creates a unified way to pre-process, split, and evaluate models on the IBM
+    Telco dataset.
+    """
     def __init__(self, excel="Telco_customer_churn.xlsx", onehot=False,
                  scale=False, smote=False):
         # Load data
@@ -88,13 +92,24 @@ class Dataset:
     def get_testing_set(self):
         return self.X_test
 
-    def accuracy(self, y_pred):
-        return accuracy_score(self.y_test, y_pred)
+    def accuracy(self, y_pred, train=False):
+        if train:
+            return accuracy_score(self.y_train, y_pred)
+        else:
+            return accuracy_score(self.y_test, y_pred)
 
-    def f1(self, y_pred):
-        return f1_score(self.y_test, y_pred)
+    def f1(self, y_pred, train=False):
+        if train:
+            return f1_score(self.y_train, y_pred)
+        else:
+            return f1_score(self.y_test, y_pred)
+    
+    def acc_f1(self, y_pred, train=False):
+        return (
+            round(self.accuracy(y_pred, train=train), 4),
+            round(self.f1(y_pred, train=train), 4)
+        )
 
     def save_predictions(self, filename, y_pred):
         pd.DataFrame(y_pred, columns=["y_pred"]) \
             .to_csv(f"{filename}.csv", index=False)
-
