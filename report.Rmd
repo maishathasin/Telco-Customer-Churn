@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Summary
+- Do this last
 
 # Introduction
 - Talk about the issue (churn) and its applications
@@ -40,7 +41,7 @@ In our initial investigation, we identified which columns of the dataset we were
 
 The preprocessing steps, including the train/test split, were done in a unified manner so that each model would be trained and tested on the exact same data, so that accurate comparisons can be made from the results. For use in a supervised classification task, we also introduced some additional preprocessing steps (not all of which are used by every model).
 
-The first optional step is Synthetic Minority Over-sampling Technique (SMOTE) [@Chawla_2002]. SMOTE is an over-sampling method intended to reduce the bias towards the majority class in classification models by artificially creating new datapoints in the minority class. The authors note that "the combination of SMOTE and under-sampling also performs better... than the methods that could directly handle the skewed class distribution". The minority class in our dataset represents approximately 24% of the entire population, so there may be a benefit for some models to apply SMOTE and under-sampling. This is implemented in our preprocessing using the imblearn package, of which we are using the SMOTENC and RandomUnderSampler methods. The SMOTENC method is designed to be used for datasets with some but not all categorical features, which matches our dataset.
+The first optional step is Synthetic Minority Over-sampling Technique (SMOTE) [@Chawla_2002]. SMOTE is an over-sampling method intended to reduce the bias towards the majority class in classification models by artificially creating new datapoints in the minority class. The authors note that "the combination of SMOTE and under-sampling also performs better... than the methods that could directly handle the skewed class distribution". The minority class in our dataset represents approximately 24% of the entire population, so there may be a benefit for some models to apply SMOTE and under-sampling. This is implemented in our preprocessing using the imblearn package, of which we are using the SMOTENC (for datasets including categorical features) and RandomUnderSampler methods. For the rest of the report, SMOTE will refer to the combination of synthetic over-sampling and random under-sampling the training set.
 
 The second optional step is the one-hot encoding step. Given our large number of categorical features, many of which are non-binary and not ordinal, some(?) classifiers require this step in order to interpret the data correctly. Each label in a categorical variate (except for the baseline) is turned into a new binary variate representing the existence of that label. This increases the number of features from 19 to 30.
 
@@ -49,17 +50,43 @@ The third optional step is feature scaling. For our three numeric features, all 
 All three optional preprocessing steps are applied independently to the training and testing sets to ensure no leakage occurs. Additionally, all preprocessing steps and models are seeded whenever possible to ensure reproducibility and deterministic behavior.
 
 ## Decision Tree
+The Decision Tree model is implemented with sklearn's DecisionTreeClassifier, and using one-hot encoded data. First, we tune the hyperparameter $\alpha$, the tuning parameter used in cost-complexity pruning.
 
+Using k-fold cross-validation with k=5, the trees were fully grown using recursive binary splitting, and then repeatedly pruned back to obtain a sequence of subtrees. Then, the average test error (on the unused fold) is computed as a function of $\alpha$, and the $\alpha$ which maximizes the average test error is chosen.
+
+Then, a Decision Tree is fit on the entire training set, then pruned back using $\alpha$ to return the final decision tree model.
+
+Two versions of this model are fitted; one using the training set, and another using the training set returned from SMOTE.
 
 ## Random Forest
+The Random Forest model is implemented with sklearn's RandomForestClassifier, and using one-hot encoded data. First, we tune the hyperparameter $d$, the maximum depth of each tree in the forest.
 
-## Neural Network (Multi-layer Perceptron)
+Using k-fold cross-validation with k=5, we used sklearn's GridSearchCV to find the best value of $d$ which maximized expected test accuracy. Each forest consists of 100 trees, and we elected not to tune the number of random features at each split, selecting the square root of the total number of features.
 
+Then, a Random Forest is fit on the entire training set, again using 100 trees, the square root of the number of features, and using the best $d$ chosen in the previous step. This is then returned as the final random forest model.
+
+Two versions of this model are fitted; one using the training set, and another using the training set returned from SMOTE.
+
+## Neural Network (Multi-Layer Perceptron)
+The Neural Network model is implemented with sklearn's MLPClassifier (Multi-Layer Perceptron Classifier), and using one-hot encoded and scaled data.
+
+First, using k-fold cross-validation with k=5, we used sklearn's GridSearchCV to tune the hyperparameters for activation function, solver (optimization algorithm), and hidden layer sizes, evaluated on expected. On the first pass, a wide range of hidden layer sizes is provided to GridSearchCV.
+
+GridSearchCV returns the optimal parameters from the parameters provided to maximize the expected accuracy. Since there are a huge number of possible hidden layer sizes (widths and depths), the first pass only selects a few which are far apart. Then, the activation function and solver method are fixed, and we repeat tuning the hidden layer sizes hyperparameter multiple times, each time narrowing the search based on the optimal parameters returned from the last iteration. A detailed breakdown of one such repeated hyperparameter tuning step is included as a multi-line comment in the code, which can be found in the appendix.
+
+Finally, a Multi-Layer Perceptron is fit on the entire training set with the chosen hyperparameters to be the final model.
+
+Two versions of this model are fitted; one with the number of hidden layers fixed to 1 (i.e. a single layer perceptron), and another without this restriction.
 
 # Results
+- Compare performance
+- Key graphs go here
+- Discuss performance, significant predictors
 
 # Discussion
 - Discuss existing Kaggle models on this dataset
+- Strengths and limitations of models
+- Future research
 
 # Appendix
 ## References
