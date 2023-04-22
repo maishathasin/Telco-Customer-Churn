@@ -8,6 +8,7 @@ output:
     md_extensions: +hard_line_breaks
 geometry: margin=1.5cm
 urlcolor: blue
+bibliography: report.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -17,11 +18,68 @@ knitr::opts_chunk$set(echo = TRUE)
 # Summary
 
 # Introduction
+- Talk about the issue (churn) and its applications
+- Describe the dataset
+- Introduce the research question
+- EDA
+
+## Dataset
+The Telco Customer Churn datset, provided by IBM, contains information about a fictional telecommunications (telco) company which provided home phone and internet services to 7043 customers. The dataset provides demographic and business-related metrics for each customer, as well as identifying whether the customer switched providers (customer churn).
+
+The dataset can be downloaded from the following link: <https://accelerator.ca.analytics.ibm.com/bi/?perspective=authoring&pathRef=.public_folders%2FIBM%2BAccelerator%2BCatalog%2FContent%2FDAT00067>
+
+The dataset contains **33** variables for **7043** observations, but not all variables are fit to be predictive features. We removed columns relating to unique IDs, geographical information, and dashboarding aggregation, as well as "duplicate" columns (those that are identical to another column except for formatting), and columns related to the response (such as the churn reason and predicted lifetime value to the company).
+
+We are then left with **19** features: Gender, Senior Citizen, Partner, Dependents, Tenure Months (integer/numeric), Phone Service, Multiple Lines, Internet Service, Online Security, Online Backup, Device Protection Plan, Tech Support, Streaming TV, Streaming Movies, Contract, Paperless Billing, Payment method, Monthly Charge (float/numeric), and Total Charges (float/numeric). Each feature is categorical except those specified otherwise. The descriptions of the features can be found at <https://community.ibm.com/community/user/businessanalytics/blogs/steven-macko/2019/07/11/telco-customer-churn-1113>.
+
+Finally, the response variable is Churn Value, binary on whether the customer left the company this quarter.
 
 # Methods
+## Preprocessing
+In our initial investigation, we identified which columns of the dataset we were going to use as features, as well as the label. We then determined the type of each feature, with all but three being categorical (including binary features), and the remainder being of unbounded numeric type. We then removed incomplete rows, leaving 7032 observations.
+
+The preprocessing steps, including the train/test split, were done in a unified manner so that each model would be trained and tested on the exact same data, so that accurate comparisons can be made from the results. For use in a supervised classification task, we also introduced some additional preprocessing steps (not all of which are used by every model).
+
+The first optional step is Synthetic Minority Over-sampling Technique (SMOTE) [@Chawla_2002]. SMOTE is an over-sampling method intended to reduce the bias towards the majority class in classification models by artificially creating new datapoints in the minority class. The authors note that "the combination of SMOTE and under-sampling also performs better... than the methods that could directly handle the skewed class distribution". The minority class in our dataset represents approximately 24% of the entire population, so there may be a benefit for some models to apply SMOTE and under-sampling. This is implemented in our preprocessing using the imblearn package, of which we are using the SMOTENC and RandomUnderSampler methods. The SMOTENC method is designed to be used for datasets with some but not all categorical features, which matches our dataset.
+
+The second optional step is the one-hot encoding step. Given our large number of categorical features, many of which are non-binary and not ordinal, some(?) classifiers require this step in order to interpret the data correctly. Each label in a categorical variate (except for the baseline) is turned into a new binary variate representing the existence of that label. This increases the number of features from 19 to 30.
+
+The third optional step is feature scaling. For our three numeric features, all three are non-negative and unbounded, and some models perform better(?) with bounded numerical values. Hence, the numeric features are rescaled to be between 0 and 1 inclusive.
+
+All three optional preprocessing steps are applied independently to the training and testing sets to ensure no leakage occurs. Additionally, all preprocessing steps and models are seeded whenever possible to ensure reproducibility and deterministic behavior.
+
+## Decision Tree
+
+
+## Random Forest
+
+## Neural Network (Multi-layer Perceptron)
+
 
 # Results
 
 # Discussion
+- Discuss existing Kaggle models on this dataset
 
 # Appendix
+## References
+
+<div id="refs"></div>
+
+## Code
+### Dataset
+General purpose Dataset class to unify the loading, preprocessing, and evaluations of the different models.
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE, code=readLines("telco.py")}
+```
+
+### Decision Tree
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE, code=readLines("dtree.py")}
+```
+
+### Random Forest
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE, code=readLines("rforest.py")}
+```
+
+### Neural Network (Multi-layer Perceptron)
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE, code=readLines("nnet.py")}
+```
