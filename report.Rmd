@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Summary
-For-profit businesses are always searching for ways to increase profits and retain paying customers. With the growing availability of statistical modelling, many businesses can leverage these tools to evaluate key metrics of their revenue, one of which is customer churn. This report seeks to compare multiple statistical models in their predictive ability and computational complexity, as well as the effect of certain preprocessing steps such as SMOTE. In particular, we evaluate Logistic Regression, Support vector Machines, K-Nearest Neighbours, Decision Trees, Random Forest, and Multi-Layer Perceptron models on the IBM Telco dataset. This report finds that all of the tested classifiers perform similarly on the same dataset, but that SMOTE tends to improve the prediction accuracy on the response of interest. This report also finds that the tested classifiers generally perform better than existing analyses using similar models.
+For-profit businesses are always searching for ways to increase profits and retain paying customers. With the growing availability of statistical modelling, many businesses can leverage these tools to evaluate key metrics of their revenue, one of which is customer churn. This report seeks to compare multiple statistical models in their predictive ability and computational complexity, as well as the effect of certain preprocessing steps such as SMOTE, on a fictional telecommunications dataset. In particular, we evaluate Logistic Regression, Support vector Machines, K-Nearest Neighbours, Decision Trees, Random Forest, and Multi-Layer Perceptron models on the IBM Telco dataset. This report finds that all of the tested classifiers perform similarly on the same dataset, but that SMOTE tends to improve the prediction accuracy on the response of interest. This report also finds that the tested classifiers generally perform better than existing analyses using similar models.
 
 # Introduction
 Customer Churn is a business term used to describe the turnover (or churn) of customers who are doing business with a company. It should be obvious that for a profit-motivated business, the loss of customers and/or the frequent turnover of customers may be undesirable. Lost customers means less revenue, and long-term customers can be an asset to the company through word-of-mouth marketing and public reputation.
@@ -31,7 +31,7 @@ Nevertheless, it may be possible to predict customer churn from quantitative cus
 Given qualitative customer data, we would like to compare the predictive ability of multiple statistical models on the same dataset, as well as explore some pre-processing techniques to improve accuracy.
 
 ## Dataset
-The Telco Customer Churn datset, provided by IBM, contains information about a fictional telecommunications (telco) company which provided home phone and internet services to 7043 customers. The dataset provides demographic and business-related metrics for each customer, as well as identifying whether the customer switched providers (customer churn).
+The Telco Customer Churn dataset, provided by IBM, contains information about a fictional telecommunications (telco) company which provided home phone and internet services to 7043 customers. The dataset provides demographic and business-related metrics for each customer, as well as identifying whether the customer switched providers (customer churn).
 
 The dataset can be downloaded from the following link: <https://accelerator.ca.analytics.ibm.com/bi/?perspective=authoring&pathRef=.public_folders%2FIBM%2BAccelerator%2BCatalog%2FContent%2FDAT00067>
 
@@ -50,13 +50,13 @@ There are some analysis from our EDA that are interesting:
 From the Figure 1, 2, 3 and 4 we can infer several correlations 
 
 - Those who don't have Tech support are more likely churn
-- Customers with month-month contracts are likely to churn, this is obvious as the customer is not commited so there is a direct correlation between churn and contract. The same goes for Tech support and Device protection dimensions
+- Customers with month-month contracts are likely to churn, this is obvious as the customer is not committed so there is a direct correlation between churn and contract. The same goes for Tech support and Device protection dimensions
 - The same goes for Tech support and Device protection dimensions
 
 - From figure 7 Most customers are senior citizens and young people , they are most likely to be dependents, thus we can also infer that they are correlated . 
--  From Figure 7 we can see that there are no clear outliers in the CLTV, this is good because we can use classficiation methods like KNN, Logistic regression without worrying too much about the outliers causing the data to over fit.  
+-  From Figure 7 we can see that there are no clear outliers in the CLTV, this is good because we can use classification methods like KNN, Logistic regression without worrying too much about the outliers causing the data to over fit.  
 
-Correlation can lead to multicollinearity, where two or more predictors in a model are highly correlated. This can result in unstable estimates of the coefficients and make it difficult to interpret the individual effect of each predictor. Multicollinearity can also reduce the model's predictive accuracy and lead to overfitting.According to Girish Chandrashekar [@CHANDRASHEKAR201416] "when two features are perfectly correlated, only one feature is sufficient to describe the data. The dependent variables provide no extra information about the classes and thus serve as noise for the predictor. This means that the total information content can be obtained from fewer unique features which contain maximum discrimination information about the classes. Hence by eliminating the dependent variables, the amount of data can be reduced which can lead to improvement in the classification performance." Thus the best way forward is to reduce correlated features by making new features that capture the data of the correlated features or eliminate them using dimensionality reduction techniques like Principal component analysis, Best subset selection etc. 
+Correlation can lead to multicollinearity, where two or more predictors in a model are highly correlated. This can result in unstable estimates of the coefficients and make it difficult to interpret the individual effect of each predictor. Multicollinearity can also reduce the model's predictive accuracy and lead to overfitting. According to Girish Chandrashekar [@CHANDRASHEKAR201416] "when two features are perfectly correlated, only one feature is sufficient to describe the data. The dependent variables provide no extra information about the classes and thus serve as noise for the predictor. This means that the total information content can be obtained from fewer unique features which contain maximum discrimination information about the classes. Hence by eliminating the dependent variables, the amount of data can be reduced which can lead to improvement in the classification performance." Thus the best way forward is to reduce correlated features by making new features that capture the data of the correlated features or eliminate them using dimensionality reduction techniques like Principal component analysis, Best subset selection etc. 
 
 Correlation can lead to the inclusion of redundant information in the model. If two predictors are highly correlated, they may provide similar information to the model, and including both predictors may not improve the model's performance. This can result in unnecessarily complex models and reduce the model's interpretability.
 
@@ -233,7 +233,11 @@ Our models relied heavily on k-fold CV to tune hyperparameters and to prevent ov
 
 Additionally, among similar methods, our models seem to slightly outperform the average accuracy of just below 80%.
 
+<<<<<<< HEAD
 ## Future research 
+=======
+## Future research
+>>>>>>> 0b2c606116e99ed4a2e91268fe88e072be54458d
 In considering potential avenues for future research in analyzing a churn dataset, there are several sophisticated approaches that may be considered. One possibility is the implementation of artificial neural networks (ANN), which have shown promise in accurately predicting churn in previous studies. Another option is the utilization of bagging and boosting methods, which can help to mitigate issues of overfitting and improve overall classification performance.
 
 Moreover, ensemble methods, as outlined in classification papers, may also hold promise for effectively predicting churn. Such methods involve combining the predictions of multiple individual models, each with their own strengths and weaknesses, in order to arrive at a more accurate and robust overall prediction.
@@ -247,7 +251,17 @@ Finally, there may be additional insights to be gleaned from further exploration
 \newpage
 # Appendix
 
+<<<<<<< HEAD
 ![ EDA](eda1.png)
+=======
+## References
+
+<div id="refs"></div>
+
+## Figures
+
+![Figure 1](eda1.png)
+>>>>>>> 0b2c606116e99ed4a2e91268fe88e072be54458d
 
 ![ EDA](eda2.png)
 
@@ -263,11 +277,6 @@ Finally, there may be additional insights to be gleaned from further exploration
 ![Showing where most customers are churning from, a large number of customers from LA](country_usa.png)
 ![Figure 9:Showing the number of features selected vs the Cross validation score](features.png)
 
-
-
-## References
-
-<div id="refs"></div>
 
 ## Code
 All of the code below can be found with the submission of this report.
