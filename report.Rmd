@@ -9,6 +9,7 @@ output:
 geometry: margin=1.5cm
 urlcolor: blue
 bibliography: report.bib
+csl: technometrics.csl
 ---
 
 ```{r setup, include=FALSE}
@@ -16,9 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Summary
-- Do this last
-- Add figure numbers/titles
-- (Opt) under/overfit analysis?
+For-profit businesses are always searching for ways to increase profits and retain paying customers. With the growing availability of statistical modelling, many businesses can leverage these tools to evaluate key metrics of their revenue, one of which is customer churn. This report seeks to compare multiple statistical models in their predictive ability and computational complexity, as well as the effect of certain preprocessing steps such as SMOTE. In particular, we evaluate Logistic Regression, Support vector Machines, K-Nearest Neighbours, Decision Trees, Random Forest, and Multi-Layer Perceptron models on the IBM Telco dataset. This report finds that all of the tested classifiers perform similarly on the same dataset, but that SMOTE tends to improve the prediction accuracy on the response of interest. This report also finds that the tested classifiers generally perform better than existing analyses using similar models.
 
 # Introduction
 Customer Churn is a business term used to describe the turnover (or churn) of customers who are doing business with a company. It should be obvious that for a profit-motivated business, the loss of customers and/or the frequent turnover of customers may be undesirable. Lost customers means less revenue, and long-term customers can be an asset to the company through word-of-mouth marketing and public reputation.
@@ -182,9 +181,11 @@ The Decision Tree was also somewhat computationally intensive to tune, but this 
 Decision Trees are also popular for their interpretability. Although we have not included the actual trees due to their size (depth 9, 31 terminal nodes for the Decision Tree with SMOTE), these can be used to identify the most important variates for prediction.
 
 ## Random Forest
-We found that our Random Forest model outperformed the single Decision Tree model, which is the advantage of an ensemble method. The Random Forest method uses many weak learners to improve the predictive power by decreasing variance, so it makes sense that the Random Forest model outperformed the Decision Tree, especially in F1 score for the minority class, when SMOTE was not applied.
+We found that our Random Forest model outperformed the single Decision Tree model, which is the advantage of an ensemble method [@Zhou_2023]. The Random Forest method uses many weak learners to improve the predictive power by decreasing variance, so it makes sense that the Random Forest model outperformed the Decision Tree, especially in F1 score for the minority class, when SMOTE was not applied.
 
 However, after SMOTE was applied to both models, the advantage was largely reduced, with Random Forest only holding a slight edge. It was also less computationally intensive than the Decision Tree, but it loses the interpretability of a single Decision Tree.
+
+The authors of the paper above also explain that the optimal tree depth is a function of the level of noise in the data, and this can be seen with the optimal depth of the SMOTE resampled model was greater than without SMOTE. Additionally, since bagging and random feature subsetting both perform regularization, limiting the tree depth may not be significantly improving performance.
 
 ## Multi-Layer Perceptron
 Neural networks in general are good at handling non-linear decision boundaries and complex relationships, and can perform well even with a large number of features. However, our dataset does not seem to be complex enough or have enough features for its advantages to shine.
@@ -225,6 +226,8 @@ Finally, there may be additional insights to be gleaned from further exploration
 <div id="refs"></div>
 
 ## Code
+All of the code below can be found with the submission of this report.
+
 ### Dataset
 General purpose Dataset class to unify the loading, preprocessing, and evaluations of the different models.
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE, code=readLines("telco.py")}
