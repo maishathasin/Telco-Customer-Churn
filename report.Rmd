@@ -303,3 +303,8 @@ General purpose Dataset class to unify the loading, preprocessing, and evaluatio
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE, code=readLines("knn.py")}
 ```
 
+### EDA
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE, code=readLines("eda.py")}
+```
+
+
