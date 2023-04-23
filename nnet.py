@@ -90,9 +90,6 @@ def create_single_layer_nnet(load=True, smote=False, save=False):
     if save:
         ds.save_predictions("slp", y_pred_prob)
 
-    # 0.8352, 0.6527 (logi-adam, (25,))
-    # 0.8381, 0.6607 (logi-adam, (5,)) <- selected
-    # 0.8381, 0.6587 (logi-adam, (4,))
     return (round(acc, 4), round(f1, 4))
 
 
@@ -142,7 +139,6 @@ def create_multi_layer_nnet(load=True, smote=False, save=False):
     if save:
         ds.save_predictions("mlp", y_pred_prob)
 
-    # 0.8338, 0.6465 (logi-adam, (5, 5, 5))
     return (round(acc, 4), round(f1, 4))
 
 

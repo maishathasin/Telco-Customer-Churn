@@ -1,14 +1,13 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import seaborn as sns
 from imblearn.over_sampling import SMOTENC
 from imblearn.pipeline import make_pipeline
 from imblearn.under_sampling import RandomUnderSampler
-import seaborn as sns
-from sklearn.compose import make_column_transformer
 from sklearn.metrics import (accuracy_score, auc, classification_report,
                              confusion_matrix, f1_score, roc_curve)
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
+from sklearn.preprocessing import MinMaxScaler
 
 
 class Dataset:
@@ -45,9 +44,8 @@ class Dataset:
         Y = df["Churn Value"]
 
         # Train/test split
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
-            X, Y, test_size=0.1, random_state=441
-        )
+        self.X_train, self.X_test, self.y_train, self.y_test = \
+        train_test_split(X, Y, test_size=0.1, random_state=441)
 
         # SMOTE (Synthetic Minority Over-sampling TEchnique)
         if smote:
@@ -64,19 +62,6 @@ class Dataset:
         if onehot:
             self.X_train = pd.get_dummies(self.X_train, drop_first=True)
             self.X_test = pd.get_dummies(self.X_test, drop_first=True)
-            # cat_cols = [col for col in X.columns if col not in num_cols]
-            # transformer = make_column_transformer(
-            #     (OneHotEncoder(drop='if_binary'), cat_cols),
-            #     remainder='passthrough'
-            # )
-            # self.X_train = pd.DataFrame(
-            #     transformer.fit_transform(self.X_train),
-            #     columns=transformer.get_feature_names_out()
-            # )
-            # self.X_test = pd.DataFrame(
-            #     transformer.fit_transform(self.X_test),
-            #     columns=transformer.get_feature_names_out()
-            # )
 
         # Scale numeric columns to [0, 1]
         if scale:
@@ -169,7 +154,8 @@ if __name__ == "__main__":
         "mlp.csv": "Multi-Layer Perceptron",
         "KNN_pred_prob.csv": "K-Nearest Neighbour (KNN)",
         "KNN_pred_prob+smote.csv": "KNN with SMOTE",
-        "knn_pred_prob+smote+robustscaler.csv": "KNN with SMOTE and RobustScaler",
+        "knn_pred_prob+smote+robustscaler.csv": 
+            "KNN with SMOTE and RobustScaler",
         "LGR_pred_prob.csv": "Logistic Regression",
         "LGR_pred_prob+smote.csv": "Logistic Regression with SMOTE",
         "new+svm.csv": "Support Vector Machine",
