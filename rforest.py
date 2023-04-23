@@ -49,5 +49,5 @@ def create_random_forest(load=True, smote=False, save=False):
     return (round(acc, 4), round(f1, 4))
 
 
-print(create_random_forest(load=True, smote=True, save=True))
 print(create_random_forest(load=True, smote=False, save=True))
+print(create_random_forest(load=True, smote=True, save=True))

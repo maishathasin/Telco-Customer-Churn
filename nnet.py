@@ -121,7 +121,7 @@ def create_multi_layer_nnet(load=True, smote=False, save=False):
     else:
         # Loads the best parameters from the search
         clf = MLPClassifier(
-            hidden_layer_sizes=(5,), activation='logistic', solver='adam',
+            hidden_layer_sizes=(5, 5, 5), activation='logistic', solver='adam',
             random_state=441, verbose=True, max_iter=1000
         )
 

@@ -102,9 +102,9 @@ class Dataset:
 
     def f1(self, y_pred, train=False):
         if train:
-            return f1_score(self.y_train, y_pred)
+            return f1_score(self.y_train, y_pred, average='weighted')
         else:
-            return f1_score(self.y_test, y_pred)
+            return f1_score(self.y_test, y_pred, average='weighted')
     
     def acc_f1(self, y_pred, train=False):
         y_pred = [0 if y < 0.5 else 1 for y in y_pred]
