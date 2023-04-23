@@ -15,4 +15,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Statement of Contributions
-Both Maisha and Joseph searched for and selected the dataset. Both members contributed to the initial investigation and dataset preprocessing, and participated in shaping the research question. Maisha performed the exploratory data analysis and trained the Support Vector Machine, Logistic Regression, and K-Nearest Neighbour classifiers. Joseph performed the discussion of similar analyses and trained the Decision Tree, Random Forest, and Neural Network classifiers. Both members contributed figures and tables to the report, and both members made significant revisions and additions to the report.
+Both Maisha and Joseph searched for and selected the dataset. Both members contributed to the initial investigation and dataset preprocessing, and participated in shaping the research question. Maisha performed the exploratory data analysis and future research ideas. Joseph performed the dataset analysis and discussion of existing analyses.
+
+Maisha trained the Support Vector Machine, Logistic Regression, and K-Nearest Neighbour classifiers, and contributed those sections to the report. Joseph trained the Decision Tree, Random Forest, and Neural Network classifiers, and contributed those sections to the report. Both members contributed figures and tables to the report, and both members made significant revisions and additions to the report.
