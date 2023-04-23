@@ -101,18 +101,21 @@ def create_tree(load=False, smote=False, save=False):
     clf = DecisionTreeClassifier(random_state=441, ccp_alpha=alpha)
     clf.fit(*ds.get_training_set())
     y_pred = clf.predict(ds.get_testing_set())
+    y_pred_prob = clf.predict_proba(ds.get_testing_set())[:, 1]
     acc = ds.accuracy(y_pred)
     f1 = ds.f1(y_pred)
 
-    print(clf.get_n_leaves())
-    print(clf.get_depth())
+    # print(clf.get_n_leaves())
+    # print(clf.get_depth())
+    # print(y_pred_prob)
 
     if save:
-        ds.save_predictions("dtree", y_pred)
+        ds.save_predictions("dtree+sm" if smote else "dtree", y_pred_prob)
 
     # 0.8097, 0.5786 (smote=False)
     # 0.8239, 0.6457 (smote=True)
     return (round(acc, 4), round(f1, 4))
 
 
-print(create_tree(load=False, smote=True))
+print(create_tree(load=True, smote=False, save=True))
+print(create_tree(load=True, smote=True, save=True))

@@ -35,15 +35,17 @@ def create_random_forest(load=True, smote=False, save=False):
         print(clf.best_params_)
 
     y_pred = clf.predict(ds.get_testing_set())
+    y_pred_prob = clf.predict_proba(ds.get_testing_set())[:, 1]
     acc = ds.accuracy(y_pred)
     f1 = ds.f1(y_pred)
 
     if save:
-        ds.save_predictions("slp", y_pred)
+        ds.save_predictions("rf+sm" if smote else "rf", y_pred_prob)
     
     # 0.8338, 0.6214 (d=8, smote=False)
     # 0.8253, 0.6496 (d=11, smote=True)
     return (round(acc, 4), round(f1, 4))
 
 
-print(create_random_forest(load=False, smote=True))
+print(create_random_forest(load=True, smote=True, save=True))
+print(create_random_forest(load=True, smote=False, save=True))

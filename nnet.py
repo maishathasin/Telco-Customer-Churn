@@ -80,11 +80,12 @@ def create_single_layer_nnet(load=True, smote=False, save=False):
         print(clf.best_params_)
 
     y_pred = clf.predict(ds.get_testing_set())
+    y_pred_prob = clf.predict_proba(ds.get_testing_set())[:, 1]
     acc = ds.accuracy(y_pred)
     f1 = ds.f1(y_pred)
 
     if save:
-        ds.save_predictions("slp", y_pred)
+        ds.save_predictions("slp", y_pred_prob)
 
     # 0.8352, 0.6527 (logi-adam, (25,))
     # 0.8381, 0.6607 (logi-adam, (5,)) <- selected
@@ -128,15 +129,16 @@ def create_multi_layer_nnet(load=True, smote=False, save=False):
         print(clf.best_params_)
 
     y_pred = clf.predict(ds.get_testing_set())
+    y_pred_prob = clf.predict_proba(ds.get_testing_set())[:, 1]
     acc = ds.accuracy(y_pred)
     f1 = ds.f1(y_pred)
 
     if save:
-        ds.save_predictions("mlp", y_pred)
+        ds.save_predictions("mlp", y_pred_prob)
 
     # 0.8338, 0.6465 (logi-adam, (5, 5, 5))
     return (round(acc, 4), round(f1, 4))
 
 
-print(create_single_layer_nnet(load=False))
-print(create_multi_layer_nnet(load=False))
+print(create_single_layer_nnet(load=True, save=True))
+print(create_multi_layer_nnet(load=True, save=True))
