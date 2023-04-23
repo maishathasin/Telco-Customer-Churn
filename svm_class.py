@@ -13,56 +13,78 @@ from sklearn.metrics import confusion_matrix, classification_report
 
 
 
+#############SVM  DEFAULT NO ENgineering###################################################
+ds = Dataset(onehot=True)
+X,y = ds.get_training_set()
+X_test,y_test = ds.get_testing_set()
 
-df = pd.read_excel('/content/Telco_customer_churn.xlsx')
-df.head()
+from sklearn.model_selection import GridSearchCV
+from sklearn.svm import SVC
 
+#get probs for AUC
+svc=SVC(probability=True) 
 
-df.columns = df.columns.str.replace(' ', '')
-df['Churn Label'].value_counts()/np.float(len(df))
+parameters = [ {'C':[1, 10, 100, 1000], 'kernel':['linear']},
+               {'C':[1, 10, 100, 1000], 'kernel':['rbf'], 'gamma':[0.1,  0.5,  0.9]},
+               {'C':[1, 10, 100, 1000], 'kernel':['poly'], 'degree': [2,3,4] ,'gamma':[0.01,0.02,0.05]} 
+              ]
 
+grid_search = GridSearchCV(estimator = svc,  
+                           param_grid = parameters,
+                           scoring = 'accuracy',
+                           cv = 5,
+                           verbose=0)
 
+svm_cv = grid_search.fit(X, y) 
 
-dd  = df.loc[df['TotalCharges'] != ' '] # removing rows with no total charges
-dd['TotalCharges'] = dd['TotalCharges'].astype('float')
-X = dd.drop(['ChurnLabel','CustomerID','Count','Country','State','City','ZipCode','LatLong','Latitude','Longitude','ChurnValue','ChurnScore','CLTV','ChurnReason'], axis=1)
-#one hot encoding
-dd['ChurnLabel'] = dd['ChurnLabel'].replace(to_replace = ['Yes','No'],value = ['1','0'])
-X = pd.get_dummies(X)
-y = dd['ChurnLabel']
+print(svm_cv.best_params_)
 
+y_pred = svm_cv.predict(X_test)
+print('Model accuracy score: {0:0.4f}'. format(ds.accuracy(y_pred))) ## test on unseen data
 
+y_pred_prob = svm_cv.predict_proba(X_test)[:, 1]
+ds.save_predictions("svm_pred_prob",y_pred_prob)
 
-#split train and test
+#############SVM  DEFAULT SMOTE ###################################################
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1, random_state = 0)
-X_train.shape, X_test.shape
+ds = Dataset(onehot=True,scale=True,smote=True)
+X,y = ds.get_training_set()
+X_test,y_test = ds.get_testing_set()
 
+svc=SVC(probability=True) 
 
+parameters = [ {'C':[1, 10, 100, 1000], 'kernel':['linear']},
+               {'C':[1, 10, 100, 1000], 'kernel':['rbf'], 'gamma':[0.1,  0.5,  0.9]},
+               {'C':[1, 10, 100, 1000], 'kernel':['poly'], 'degree': [2,3,4] ,'gamma':[0.01,0.02,0.05]} 
+              ]
+grid_search = GridSearchCV(estimator = svc,  
+                           param_grid = parameters,
+                           scoring = 'accuracy',
+                           cv = 5,
+                           verbose=0)
+svc_cv = grid_search.fit(X, y) 
+print(svc_cv.best_params_)
+y_pred = svc_cv.predict(X_test)
+## test on unseen data
+print('Model accuracy score: {0:0.4f}'. format(ds.accuracy(y_pred))) 
+print(classification_report(y_test, y_pred))
+###confusion matrix 
+c = confusion_matrix(y_test, y_pred)
+cc_matrix = pd.DataFrame(data=c, columns=['true churn', 'true not churn'], 
+                                 index=['predict churn', 'predict not churn''])
+sns.heatmap(cc_matrix, annot=True,fmt='d')
 
+y_pred_prob = svc_cv.predict_proba(X_test)[:, 1]
+ds.save_predictions("svm+smote_pred_prob",y_pred_prob)
+####bootstrap#########
+##BOOTSTRAP 
+## to see how the density multiple lengths score
 
-svc=SVC() 
-svc.fit(X_train,y_train)
-y_pred=svc.predict(X_test)
-print('Model accuracy score with default hyperparameters: {0:0.4f}'. format(accuracy_score(y_test, y_pred)))
+bt_ac = []
+bt = 1000
+for i in range(bt):
+    X_b,y_b = resample(X, y, replace=True)
+    y_new = lgr.predict(X_b)
+    score = accuracy_score(y_b, y_new)
+    bt_ac.append(score)
 
-svc=SVC(C=100)
-svc.fit(X_train,y_train)
-y_pred=svc.predict(X_test)
-print('Model accuracy score with C = 100: {0:0.4f}'. format(accuracy_score(y_test, y_pred)))
-
-svc=SVC(kernel='poly',C=100)
-svc.fit(X_train,y_train)
-y_pred = svc.predict(X_test)
-print('Model accuracy score with C = 100: {0:0.4f} and polynomial kernal'. format(accuracy_score(y_test, y_pred)))
-
-svc=SVC(kernel='sigmoid',C=100)
-svc.fit(X_train,y_train)
-y_pred=svc.predict(X_test)
-print('Model accuracy score with C = 100: {0:0.4f} and sigmoid kernal'. format(accuracy_score(y_test, y_pred)))
-
-
-#Model accuracy score with default hyperparameters: 0.7585
-#Model accuracy score with C = 100: 0.8011
-#Model accuracy score with C = 100: 0.7585 and polynomial kernal
-#Model accuracy score with C = 100: 0.6264 and sigmoid kernal
