@@ -259,6 +259,9 @@ Finally, there may be additional insights to be gleaned from further exploration
 
 ![Figure 7](cont_charges.png)
 
+![Figure 8: Showing where most customers are churning from, a large number of customers from LA](country_usa.png)
+
+
 
 ## References
 
