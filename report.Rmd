@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Summary
 - Do this last
+- Add figure numbers/titles
+- (Opt) under/overfit analysis?
 
 # Introduction
 Customer Churn is a business term used to describe the turnover (or churn) of customers who are doing business with a company. It should be obvious that for a profit-motivated business, the loss of customers and/or the frequent turnover of customers may be undesirable. Lost customers means less revenue, and long-term customers can be an asset to the company through word-of-mouth marketing and public reputation.
@@ -48,18 +50,18 @@ In our initial investigation, we identified which columns of the dataset we were
 
 The preprocessing steps, including the train/test split, were done in a unified manner so that each model would be trained and tested on the exact same data, so that accurate comparisons can be made from the results. For use in a supervised classification task, we also introduced some additional preprocessing steps (not all of which are used by every model).
 
-The first optional step is Synthetic Minority Over-sampling Technique (SMOTE) [@Chawla_2002]. SMOTE is an over-sampling method intended to reduce the bias towards the majority class in classification models by artificially creating new datapoints in the minority class. The authors note that "the combination of SMOTE and under-sampling also performs better... than the methods that could directly handle the skewed class distribution". The minority class in our dataset represents approximately 24% of the entire population, so there may be a benefit for some models to apply SMOTE and under-sampling. This is implemented in our preprocessing using the imblearn package, of which we are using the SMOTENC (for datasets including categorical features) and RandomUnderSampler methods. For the rest of the report, SMOTE will refer to the combination of synthetic over-sampling and random under-sampling the training set.
+The first optional step is Synthetic Minority Over-sampling Technique (SMOTE) [@Chawla_2002]. SMOTE is an over-sampling method intended to reduce the bias towards the majority class in classification models by artificially creating new datapoints in the minority class. The authors of the SMOTE paper note that "the combination of SMOTE and under-sampling also performs better... than the methods that could directly handle the skewed class distribution". The minority class in our dataset represents approximately 24% of the entire population, so there may be a benefit for some models to apply SMOTE and under-sampling. This is implemented in our preprocessing using the imblearn package, of which we are using the SMOTENC (for datasets including categorical features) and RandomUnderSampler methods. For the rest of the report, SMOTE will refer to the combination of synthetic over-sampling and random under-sampling the training set.
 
 The second step is the one-hot encoding step. All of our models required the categorical features to be one-hot encoded to interpret the data correctly. Each label in a categorical variate is turned into a new binary variate representing the existence of that label, with the exception of the baseline label, represented as zeros across all of the new variates. For variates with only two labels, this is equivalent to interpreting it as a binary variate. This increases the number of features from 19 to 30.
 
-The third optional step is feature scaling. For our three numeric features, all three are non-negative and unbounded, and some models perform better(?) with bounded numerical values. Hence, the numeric features are rescaled to be between 0 and 1 inclusive.
+The third optional step is feature scaling. For our three numeric features, all three are non-negative and unbounded, and some models perform better with bounded numerical values. Hence, the numeric features are rescaled to be between 0 and 1 inclusive.
 
-All three optional preprocessing steps are applied independently to the training and testing sets to ensure no leakage occurs. Additionally, all preprocessing steps and models are seeded whenever possible to ensure reproducibility and deterministic behavior.
+All three preprocessing steps are applied independently to the training and testing sets to ensure no leakage occurs (specifically for SMOTE, but also for feature scaling). Additionally, all preprocessing steps and models are seeded whenever possible to ensure reproducibility and deterministic behavior.
 
 ## Logistic Regression
 Logistic regression is a widely used algorithm in machine learning, especially for binary classification problems like churn cases. We modeled 2 logistic regression models using different feature engineering techniques one with raw data and one with Undersampling techniques.
 
- To find the best hyper parameters for each model, we used a grid search function in sklearn called GridSearchCV and standardized the data by splitting it into five folds for each model. We used two types of penalty, LASSO and Ridge regression, which correspond to l1 and l2 penalties, respectively for it's hyperparameters. We also tuned the regularization parameter C, where higher values of C indicate that the training data is more representative, while smaller C values imply that the training data is less representative.
+To find the best hyper parameters for each model, we used a grid search function in sklearn called GridSearchCV and standardized the data by splitting it into five folds for each model. We used two types of penalty, LASSO and Ridge regression, which correspond to l1 and l2 penalties, respectively for it's hyperparameters. We also tuned the regularization parameter C, where higher values of C indicate that the training data is more representative, while smaller C values imply that the training data is less representative.
  
 To further improve our models, we utilized the Recursive Feature Elimination (RFE) method, which eliminates features that reduce the cross-validation score recursively. By selecting only the most relevant features, RFE can help improve the model's accuracy, reduce overfitting, and enhance interpretability. 
 Each model was tested for accuracy, F1 score, and ROC score. To test for overfitting, we repeated the tuned model over 1000 samples and found its average accuracy score. 
@@ -91,7 +93,7 @@ We tuned SVM again with Grid Search CV to fine-tune its parameters. Specifically
 
 
 ## Decision Tree
-The Decision Tree model is implemented with sklearn's DecisionTreeClassifier, and using one-hot encoded data. First, we tune the hyperparameter $\alpha$, the tuning parameter used in cost-complexity pruning.
+The Decision Tree model is implemented with sklearn's DecisionTreeClassifier, and using one-hot encoded data. First, we tune the hyperparameter $\alpha$, the tuning parameter used in cost-complexity pruning. A larger value of $\alpha$, a complexity penalty, corresponds to a more pruned tree with fewer terminal nodes, and a lower value of $\alpha$ corresponds to a less pruned tree with more terminal nodes.
 
 Using k-fold cross-validation with k=5, the trees were fully grown using recursive binary splitting, and then repeatedly pruned back to obtain a sequence of subtrees. Then, the average test error (on the unused fold) is computed as a function of $\alpha$, and the $\alpha$ which maximizes the average test error is chosen.
 
@@ -102,7 +104,7 @@ Two versions of this model are fitted; one using the training set, and another u
 ## Random Forest
 The Random Forest model is implemented with sklearn's RandomForestClassifier, and using one-hot encoded data. First, we tune the hyperparameter $d$, the maximum depth of each tree in the forest.
 
-Using k-fold cross-validation with k=5, we used sklearn's GridSearchCV to find the best value of $d$ which maximized expected test accuracy. Each forest consists of 100 trees, and we elected not to tune the number of random features at each split, selecting the square root of the total number of features.
+Using k-fold cross-validation with k=5, we used sklearn's GridSearchCV to find the best value of $d$ which maximized expected test accuracy. Each forest consists of 100 trees, and we elected not to tune the number of random features at each split ($m$), selecting the square root of the total number of features.
 
 Then, a Random Forest is fit on the entire training set, again using 100 trees, the square root of the number of features, and using the best $d$ chosen in the previous step. This is then returned as the final random forest model.
 
@@ -122,8 +124,9 @@ Two versions of this model are fitted; one with the number of hidden layers fixe
 # Results
 - Compare performance
 - Key graphs go here
-- Discuss performance, significant predictors
+- Discuss performance, significant predictors?
 
+Below is a summary of each fitted model, the accuracy, f1 scores for each label, the area under the ROC curve (AUC), and the tuned hyperparameters.
 
 \begin{tabular}{l l l l l} \hline
 Model & Accuracy & F1 label=0 & F1 label=1 & Hyperparameters \\ \hline
@@ -138,22 +141,21 @@ Multi-Layer Perceptron & 0.83 & 0.89 & 0.65 & activation = logistic, solver = ad
 \hline
 \end{tabular}
 
+Additionally, we can plot all the ROC curves together:
 
-| Model | Accuracy | F1 label = 0 | F1 label = 1 | F1 | Hyperparameters |
-|-------|----------|----------|----|----|----------------|
-| Logistic regression (raw) | 0.841 | 0.89 | 0.71 | ? | ['penalty':['l1','l2'], 
-              'C':[1, 10, 100, 1000]] |
-| Logistic regression (SMOTE + Scale) | 0.87 | 0.82 | 120 | 25 | K=7, Distance=Euclidean |
-| Model 3 | 0.83 | 0.76 | 95 | 18 | K=3, Distance=Manhattan |
-| Model 4 | 0.89 | 0.84 | 130 | 23 | K=9, Distance=Cosine |
-| Model 5 | 0.82 | 0.75 | 90 | 17 | K=5, Distance=Minkowski |
-| Model 6 | 0.88 | 0.83 | 125 | 21 | K=7, Distance=Euclidean |
-| Model 7 | 0.84 | 0.77 | 97 | 19 | K=3, Distance=Manhattan |
-| Model 8 | 0.90 | 0.85 | 135 | 22 | K=9, Distance=Cosine |
-| Model 9 | 0.81 | 0.74 | 88 | 16 | K=5, Distance=Minkowski |
-| Model 10 | 0.89 | 0.83 | 123 | 24 | K=7, Distance=Euclidean |
-| Model 11 | 0.85 | 0.78 | 98 | 18 | K=3, Distance=Manhattan |
-| Model 12 | 0.91 | 0.86 | 138 | 21 | K=9, Distance=Cosine |
+![](ROC.png)
+
+We can see that in general, most of the classifiers performed similarly on the dataset. All of the classifiers have a similar accuracy and AUC on the testing set, but SMOTE seems to help with the F1 score for label=1.
+
+The F1 score is computed as $2 \cdot \frac{\text{precision} \cdot \text{recall}}{\text{precision} + \text{recall}}$, so it serves as a balance between precision and recall for a given label.
+
+Recalling that a response of 1 indicates that a customer has churned, the F1 score for the response of 1 is of importance, as we would like to correctly identify high risk customers (recall) and avoid spending extra resource on low risk customers (precision). Noting also that it is the minority class, it is beneficial to use SMOTE as it increases the performance of the models on the minority class without impacting the overall accuracy much at all.
+
+- Talk about specific models here
+
+For the Decision Tree model, we can see that SMOTE results in an increased value of $\alpha$. This indicates that even with k-fold CV, the base Decision Tree model might still be overfitting somewhat, as the Decision Tree with SMOTE model performs better overall with a smaller subtree. It may be that SMOTE is only countering the tendency to classify towards the majority class and that just so happens to be with a larger penalty, as it is difficult to draw a causal link between the two.
+
+- Look at AUC?
 
 # Discussion
 - Discuss existing Kaggle models on this dataset
