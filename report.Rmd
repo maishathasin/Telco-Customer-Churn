@@ -191,6 +191,19 @@ For the Decision Tree model, we can see that SMOTE results in an increased value
 - Strengths and limitations of models
 - Future research
 
+
+## Future research  (Relevant papers refer)
+In considering potential avenues for future research in analyzing a churn dataset, there are several sophisticated approaches that may be considered. One possibility is the implementation of artificial neural networks (ANN), which have shown promise in accurately predicting churn in previous studies. Another option is the utilization of bagging and boosting methods, which can help to mitigate issues of overfitting and improve overall classification performance.
+
+Moreover, ensemble methods, as outlined in classification papers, may also hold promise for effectively predicting churn. Such methods involve combining the predictions of multiple individual models, each with their own strengths and weaknesses, in order to arrive at a more accurate and robust overall prediction.
+
+In addition, feature engineering could be a valuable tool in understanding and predicting churn. Specifically, combining relevant features and testing their impact on various models could offer insights into which features are most important in predicting churn. For example, combining demographic data with customer behavior data may yield more accurate predictions than either set of data alone.
+
+Furthermore, researching additional factors related to churn and incorporating them into models could help to improve predictive accuracy. Specifically, contextual factors, such as the customer's reason for using a particular service or product, could be considered in developing more effective models.
+
+Finally, there may be additional insights to be gleaned from further exploration of the churn dataset. For example, identifying specific subgroups of customers that are more likely to churn or investigating the relationship between customer satisfaction and churn could offer valuable insights for improving retention efforts.
+
+
 \newpage
 # Appendix
 ## References
