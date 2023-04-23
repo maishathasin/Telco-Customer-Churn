@@ -218,6 +218,9 @@ Interestingly, both the single-layer perceptron and multi-layer perceptron tunin
 
 Larger models also usually require more data to train, so it could be the case that there isn't enough data for the larger models to match the performance of the simpler models. In this case, we can see an application of Occam's Razor, as the simple single-layer perceptron performs as well as any of our other models.
 
+## Concluding Results 
+From our model we can see that most models are almost give the same accuracy and complex models are not needed for such a dataset. In terms of performance on other bootstrapped data, computational complexity and intelligibility I would fit this dataset with the SVM model, although it is slower than Logistic regression, it performs better on 'unseen' data than LR also, it's its less complex and computationally intensive than trees and Neural Networks, for the same accuracy and fair levels of F1.  
+
 # Discussion
 ## Existing analyses
 The IBM Telco dataset is also popular on Kaggle, including a few high quality analyses. The following link shows 24 other analyses of the same dataset: <https://www.kaggle.com/datasets/yeanzc/telco-customer-churn-ibm-dataset/code>
