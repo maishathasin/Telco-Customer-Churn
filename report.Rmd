@@ -19,10 +19,15 @@ knitr::opts_chunk$set(echo = TRUE)
 - Do this last
 
 # Introduction
-- Talk about the issue (churn) and its applications
-- Describe the dataset
-- Introduce the research question
-- EDA
+Customer Churn is a business term used to describe the turnover (or churn) of customers who are doing business with a company. It should be obvious that for a profit-motivated business, the loss of customers and/or the frequent turnover of customers may be undesirable. Lost customers means less revenue, and long-term customers can be an asset to the company through word-of-mouth marketing and public reputation.
+
+Besides the loss in profits, it often costs more for a company to acquire new customers rather than retain their existing customers, so businesses stand to save money if they can identify reasons why customers are leaving and address those issues. However, even if we cannot identify specific reasons, if it is possible to identify customers who may be at a higher risk of churn, the business may still benefit from targeting those customers by incentivizing them to stay. Of course, the methods by which those businesses target those customers may be below board, but that is far beyond the scope of this report.
+
+One industry in which there is significant turnover is the telecommunications industry. The authors themselves have firsthand experience with the frustrations of changing internet and phone providers, and would like to mention that they cannot endorse intentionally creating barriers to exit and setting up multiple subsidiaries with different names as ethical strategies to counter customer churn.
+
+Nevertheless, it may be possible to predict customer churn from quantitative customer data. This does not account for qualitative or unmeasured factors such as product dissatisfaction, corporate image, brand loyalty, and other similar factors.
+
+Given qualitative customer data, we would like to compare the predictive ability of multiple statistical models on the same dataset, as well as explore some pre-processing techniques to improve accuracy.
 
 ## Dataset
 The Telco Customer Churn datset, provided by IBM, contains information about a fictional telecommunications (telco) company which provided home phone and internet services to 7043 customers. The dataset provides demographic and business-related metrics for each customer, as well as identifying whether the customer switched providers (customer churn).
@@ -35,6 +40,8 @@ We are then left with **19** features: Gender, Senior Citizen, Partner, Dependen
 
 Finally, the response variable is Churn Value, binary on whether the customer left the company this quarter.
 
+## Exploratory Data Analysis
+
 # Methods
 ## Preprocessing
 In our initial investigation, we identified which columns of the dataset we were going to use as features, as well as the label. We then determined the type of each feature, with all but three being categorical (including binary features), and the remainder being of unbounded numeric type. We then removed incomplete rows, leaving 7032 observations.
@@ -43,7 +50,7 @@ The preprocessing steps, including the train/test split, were done in a unified 
 
 The first optional step is Synthetic Minority Over-sampling Technique (SMOTE) [@Chawla_2002]. SMOTE is an over-sampling method intended to reduce the bias towards the majority class in classification models by artificially creating new datapoints in the minority class. The authors note that "the combination of SMOTE and under-sampling also performs better... than the methods that could directly handle the skewed class distribution". The minority class in our dataset represents approximately 24% of the entire population, so there may be a benefit for some models to apply SMOTE and under-sampling. This is implemented in our preprocessing using the imblearn package, of which we are using the SMOTENC (for datasets including categorical features) and RandomUnderSampler methods. For the rest of the report, SMOTE will refer to the combination of synthetic over-sampling and random under-sampling the training set.
 
-The second optional step is the one-hot encoding step. Given our large number of categorical features, many of which are non-binary and not ordinal, some(?) classifiers require this step in order to interpret the data correctly. Each label in a categorical variate is turned into a new binary variate representing the existence of that label. There are two versions of the one-hot encoding step; the first has all labels given their own variate, increasing the number of features from 19 to 46; the second has one label per category set as a baseline and not given its own variate (i.e. dropped), increasing the number of features from 19 to 30.
+The second step is the one-hot encoding step. All of our models required the categorical features to be one-hot encoded to interpret the data correctly. Each label in a categorical variate is turned into a new binary variate representing the existence of that label, with the exception of the baseline label, represented as zeros across all of the new variates. For variates with only two labels, this is equivalent to interpreting it as a binary variate. This increases the number of features from 19 to 30.
 
 The third optional step is feature scaling. For our three numeric features, all three are non-negative and unbounded, and some models perform better(?) with bounded numerical values. Hence, the numeric features are rescaled to be between 0 and 1 inclusive.
 
@@ -96,6 +103,7 @@ Two versions of this model are fitted; one with the number of hidden layers fixe
 - Strengths and limitations of models
 - Future research
 
+\newpage
 # Appendix
 ## References
 
