@@ -130,20 +130,20 @@ Below is a summary of each fitted model, the accuracy, f1 scores for each label,
 
 \begin{tabular}{l l l l l l} \hline
 Model & Accuracy & F1 label=0 & F1 label=1 & AUC & Hyperparameters \\ \hline
-Logistic regression & 0.84 & 0.89 & 0.64 & 0.88 & penalty = l1 ,C = 1\\
-Logistic regression + SMOTE & 0.84 & 0.89 & 0.70 & 0.88 & penalty = l2 ,C = 100\\
+Logistic regression & 0.84 & 0.89 & 0.64 & 0.878 & penalty = l1 ,C = 1\\
+Logistic regression + SMOTE & 0.84 & 0.89 & 0.70 & 0.878 & penalty = l2 ,C = 100\\
 SVM & (?) & (?) & (?)& &C = , Kernel, Gamma = , Degree =\\
 SVM + SMOTE & (?) & (?) & (?) & & C = , Kernel, Gamma = , Degree = \\
-KNN  & 0.80 & 0.89 & 0.71 & 0.88 & m = minkowski, n = 14, w = uniform\\
-KNN + SMOTE  & 0.81 & 0.87 & 0.65 & 0.88 & m = cosine, n = 16, w = uniform\\
-KNN + SMOTE + Robust Scaler & 0.82 & 0.87 & 0.68 & 0.86 & m = minkowski, n = 14, w = uniform\\
-Decision Tree & 0.81 & 0.88 & 0.58 & 0.86 & $\alpha$ = 0.000731 \\
-Decision Tree + SMOTE & 0.82 & 0.88 & 0.65 & 0.87 & $\alpha$ = 0.000897 \\
-Random Forest & 0.83 & 0.89 & 0.62 & 0.88 & m = sqrt, max depth=8 \\
-Random Forest + SMOTE & 0.83 & 0.88 & 0.65 & 0.88 & m = sqrt, max depth=11 \\
-Single-Layer Perceptron & 0.84 & 0.89 & 0.66 & 0.88 & activation = logistic, solver = adam, \\
+KNN  & 0.80 & 0.89 & 0.71 & 0.878 & m = minkowski, n = 14, w = uniform\\
+KNN + SMOTE  & 0.81 & 0.87 & 0.65 & 0.878 & m = cosine, n = 16, w = uniform\\
+KNN + SMOTE + Robust Scaler & 0.82 & 0.87 & 0.68 & 0.858 & m = minkowski, n = 14, w = uniform\\
+Decision Tree & 0.81 & 0.88 & 0.58 & 0.856 & $\alpha$ = 0.000731 \\
+Decision Tree + SMOTE & 0.82 & 0.88 & 0.65 & 0.870 & $\alpha$ = 0.000897 \\
+Random Forest & 0.83 & 0.89 & 0.62 & 0.877 & m = sqrt, max depth=8 \\
+Random Forest + SMOTE & 0.83 & 0.88 & 0.65 & 0.878 & m = sqrt, max depth=11 \\
+Single-Layer Perceptron & 0.84 & 0.89 & 0.66 & 0.878 & activation = logistic, solver = adam, \\
 &&&&& hidden layers = (5,) \\
-Multi-Layer Perceptron & 0.83 & 0.89 & 0.65 & 0.88 & activation = logistic, solver = adam, \\
+Multi-Layer Perceptron & 0.83 & 0.89 & 0.65 & 0.880 & activation = logistic, solver = adam, \\
 &&&&& hidden layers = (5, 5, 5) \\
 \hline
 \end{tabular}
