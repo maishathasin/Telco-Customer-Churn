@@ -43,6 +43,24 @@ Finally, the response variable is Churn Value, binary on whether the customer le
 
 ## Exploratory Data Analysis
 
+![Figure 6: ](correlation.png)
+
+There are some analysis from our EDA that are interesting: 
+
+From the Figure 1, 2, 3 and 4 we can infer several correlations 
+
+- Those who don't have Tech support are more likely churn
+- Customers with month-month contracts are likely to churn, this is obvious as the customer is not commited so there is a direct correlation between churn and contract. The same goes for Tech support and Device protection dimensions
+- The same goes for Tech support and Device protection dimensions
+
+- From figure 7 Most customers are senior citizens and young people , they are most likely to be dependents, thus we can also infer that they are correlated . 
+-  From Figure 7 we can see that there are no clear outliers in the CLTV, this is good because we can use classficiation methods like KNN, Logistic regression without worrying too much about the outliers causing the data to over fit.  
+
+Correlation can lead to multicollinearity, where two or more predictors in a model are highly correlated. This can result in unstable estimates of the coefficients and make it difficult to interpret the individual effect of each predictor. Multicollinearity can also reduce the model's predictive accuracy and lead to overfitting.According to Girish Chandrashekar "when two features are perfectly correlated, only one feature is sufficient to describe the data. The dependent variables provide no extra information about the classes and thus serve as noise for the predictor. This means that the total information content can be obtained from fewer unique features which contain maximum discrimination information about the classes. Hence by eliminating the dependent variables, the amount of data can be reduced which can lead to improvement in the classification performance." Thus the best way forward is to reduce correlated features by making new features that capture the data of the correlated features or eliminate them using dimensionality reduction techniques like Principal component analysis, Best subset selection etc. 
+
+Correlation can lead to the inclusion of redundant information in the model. If two predictors are highly correlated, they may provide similar information to the model, and including both predictors may not improve the model's performance. This can result in unnecessarily complex models and reduce the model's interpretability.
+
+
 # Methods
 ## Preprocessing
 In our initial investigation, we identified which columns of the dataset we were going to use as features, as well as the label. We then determined the type of each feature, with all but three being categorical (including binary features), and the remainder being of unbounded numeric type. We then removed incomplete rows, leaving 7032 observations.
@@ -126,8 +144,8 @@ Below is a summary of each fitted model, the accuracy, f1 scores for each label,
 Model & Accuracy & F1 label=0 & F1 label=1 & AUC & Hyperparameters \\ \hline
 Logistic regression & 0.84 & 0.89 & 0.64 & 0.878 & penalty = l1 ,C = 1\\
 Logistic regression + SMOTE & 0.84 & 0.89 & 0.70 & 0.878 & penalty = l2 ,C = 100\\
-SVM & (0.82) & (0.88) & (0.65)& &C = 1, Kernel= rbf, Gamma = 0.1\\
-SVM + SMOTE & (?) & (?) & (?) & & C = , Kernel, Gamma = , Degree = \\
+SVM & 0.77 & 0.86 & 0.27& &C = 1, Kernel= rbf, Gamma = 0.1\\
+SVM + SMOTE & 0.82 & 0.88 & 0.65 & &C = 1, Kernel= rbf, Gamma = 0.1\\
 KNN  & 0.80 & 0.89 & 0.71 & 0.878 & m = minkowski, n = 14, w = uniform\\
 KNN + SMOTE  & 0.81 & 0.87 & 0.65 & 0.878 & m = cosine, n = 16, w = uniform\\
 KNN + SMOTE + Robust Scaler & 0.82 & 0.87 & 0.68 & 0.858 & m = minkowski, n = 14, w = uniform\\
@@ -170,7 +188,13 @@ While KNN is a powerful algorithm, it is more computationally intensive than Log
 
 ## SVM
 
+Support Vector Machines (SVM) is a powerful machine learning algorithm that can improve accuracy when combined with under-sampling techniques. A soft margin with C=1 was used in this case, which can result in underfitting if many outliers are present. However, in this particular dataset, the number of outliers is relatively low, so the margins remain soft. The SVM model did not show any signs of underfitting, which can be attributed to the smaller number of outliers. The high accuracy achieved by the model is a testament to its effectiveness as a classifier.
+
+Similar to other classifiers, the F1 value of the SVM model is used to assess its performance. An increase in the F1 value indicates a larger gap between the support vectors, indicating an increased margin and better separation between the classes. As a result, the SVM model was able to achieve high accuracy, with the support vectors further apart, leading to improved classification. Nonetheless, it is important to note that the SVM model can be computationally intensive when testing multiple combinations of hyperparameters, so careful consideration of the search space is crucial for optimal efficiency.
+
 ![](test.jpg)
+
+
 
 
 ## Decision Tree
@@ -221,6 +245,21 @@ Finally, there may be additional insights to be gleaned from further exploration
 
 \newpage
 # Appendix
+
+![Figure 1](eda1.png)
+
+![Figure 2](eda2.png)
+
+![Figure 3](eda3.png)
+
+
+![Figure 4](eda4.png)
+
+![Figure 5: ](eda5.png)
+
+![Figure 7](cont_charges.png)
+
+
 ## References
 
 <div id="refs"></div>
