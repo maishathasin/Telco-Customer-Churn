@@ -91,7 +91,6 @@ To test for overfitting, we repeated the tuned model over 1000  bootstrapped sam
 ## SVM
 We tuned SVM again with Grid Search CV to fine-tune its parameters. Specifically, we explored a variety of parameter combinations using a dictionary of values, consisting of the regularization parameter C and the kernel type.Where C is the 'hardness' of the margins the higher C means SVM will be more robust to outliers. For the linear kernel, we tested C values of 1, 10, 100, and 1000. For the non-linear kernels, we additionally investigated the gamma parameter for the radial basis function (RBF) and the degree parameter for the polynomial kernel, with gamma values of 0.1 to 0.9 and degree values of 2, 3, and 4, respectively.In addition, we evaluated the effectiveness of both raw data and SMOTE  + scale data, repeating the entire process for both approaches. We calculated the accuracy, class F1 score etc. To test for overfitting, we repeated the tuned model over 100  bootstrapped samples. 
 
-
 ## Decision Tree
 The Decision Tree model is implemented with sklearn's DecisionTreeClassifier, and using one-hot encoded data. First, we tune the hyperparameter $\alpha$, the tuning parameter used in cost-complexity pruning. A larger value of $\alpha$, a complexity limit, corresponds to a more complex tree with less pruning, and a lower value of $\alpha$ corresponds to a less complex tree with more pruning.
 
@@ -126,7 +125,6 @@ Below is a summary of each fitted model, the accuracy, f1 scores for each label,
 
 \begin{tabular}{l l l l l l} \hline
 Model & Accuracy & F1 label=0 & F1 label=1 & AUC & Hyperparameters \\ \hline
-Logistic regression & 0.84 & 0.89 & 0.65 & 0.88 & penalty = l1 ,C = 1\\
 Logistic regression & 0.84 & 0.89 & 0.64 & 0.878 & penalty = l1 ,C = 1\\
 Logistic regression + SMOTE & 0.84 & 0.89 & 0.70 & 0.878 & penalty = l2 ,C = 100\\
 SVM & (0.82) & (0.88) & (0.65)& &C = 1, Kernel= rbf, Gamma = 0.1\\
