@@ -93,7 +93,7 @@ We tuned SVM again with Grid Search CV to fine-tune its parameters. Specifically
 
 
 ## Decision Tree
-The Decision Tree model is implemented with sklearn's DecisionTreeClassifier, and using one-hot encoded data. First, we tune the hyperparameter $\alpha$, the tuning parameter used in cost-complexity pruning. A larger value of $\alpha$, a complexity penalty, corresponds to a more pruned tree with fewer terminal nodes, and a lower value of $\alpha$ corresponds to a less pruned tree with more terminal nodes.
+The Decision Tree model is implemented with sklearn's DecisionTreeClassifier, and using one-hot encoded data. First, we tune the hyperparameter $\alpha$, the tuning parameter used in cost-complexity pruning. A larger value of $\alpha$, a complexity limit, corresponds to a more complex tree with less pruning, and a lower value of $\alpha$ corresponds to a less complex tree with more pruning.
 
 Using k-fold cross-validation with k=5, the trees were fully grown using recursive binary splitting, and then repeatedly pruned back to obtain a sequence of subtrees. Then, the average test error (on the unused fold) is computed as a function of $\alpha$, and the $\alpha$ which maximizes the average test error is chosen.
 
@@ -159,12 +159,7 @@ The F1 score is computed as $2 \cdot \frac{\text{precision} \cdot \text{recall}}
 
 Recalling that a response of 1 indicates that a customer has churned, the F1 score for the response of 1 is of importance, as we would like to correctly identify high risk customers (recall) and avoid spending extra resource on low risk customers (precision). Noting also that it is the minority class, it is beneficial to use SMOTE as it increases the performance of the models on the minority class without impacting the overall accuracy much at all.
 
-- Talk about specific models here
-
 ### Logistic regression
-
--light weight model 
--performs well cause the dataset is not very complicated and we also reduce the number of features 
 Our team utilized logistic regression as our classification model for predicting churn, given its binary nature and speedy computational efficiency. We conducted an in-depth analysis of the model's performance using various techniques such as SMOTE, hyper-parameter tuning, bootstrapped values, and recursive feature elimination to ensure that it can produce reliable results with high accuracy.
 
 We observed that logistic regression performed exceptionally well when SMOTE was applied, resulting in the highest accuracy scores. The model's hyperparameters were adjusted to prevent overfitting, ensuring that the model generalizes well on unseen data. Moreover, logistic regression produced very few false positives and negatives, which is a desirable characteristic for a churn prediction model.
@@ -180,17 +175,31 @@ We also used weights to reduce the focus on the outliers, as increasing the numb
 
 While KNN is a powerful algorithm, it is more computationally intensive than Logistic Regression, making it less suitable for large datasets. In our EDA, we noticed that there were not too many outliers, which resulted in good accuracy. However, the algorithm was not very robust, indicating that it may not perform well with more outliers.
 
+## Decision Tree
+For the Decision Tree model, we can see that SMOTE results in an increased value of $\alpha$. This might be because the base model isn't gaining enough value from splitting a node with few values with response 1, but the more balanced split after resampling can alleviate this problem, allowing the tree to justify an increased complexity.
 
+The Decision Tree was also somewhat computationally intensive to tune, but this may be a result of the implementation. An efficient implementation [@Blockeel_2001] can result in significant runtime reductions by building trees in parallel, especially for larger k values. The authors of the paper used 10-fold CV and found up to a 10-fold speedup depending on the dataset.
 
-For the Decision Tree model, we can see that SMOTE results in an increased value of $\alpha$. This indicates that even with k-fold CV, the base Decision Tree model might still be overfitting somewhat, as the Decision Tree with SMOTE model performs better overall with a smaller subtree. It may be that SMOTE is only countering the tendency to classify towards the majority class and that just so happens to be with a larger penalty, as it is difficult to draw a causal link between the two.
+Decision Trees are also popular for their interpretability. Although we have not included the actual trees due to their size (depth 9, 31 terminal nodes for the Decision Tree with SMOTE), these can be used to identify the most important variates for prediction.
 
-- Look at AUC?
+## Random Forest
+We found that our Random Forest model outperformed the single Decision Tree model, which is the advantage of an ensemble method. The Random Forest method uses many weak learners to improve the predictive power by decreasing variance, so it makes sense that the Random Forest model outperformed the Decision Tree when SMOTE was not applied.
+
+However, after SMOTE was applied to both models, the advantage was largely reduced, with Random Forest only holding a slight edge. It was also less computationally intensive than the Decision Tree, but it loses the interpretability of a single Decision Tree.
+
+## Multi-Layer Perceptron
 
 # Discussion
-- Discuss existing Kaggle models on this dataset
-- Strengths and limitations of models
-- Future research
+## Existing analyses
+The IBM Telco dataset is also popular on Kaggle, including a few well-received analyses. The following link shows 24 other analyses of the same dataset: <https://www.kaggle.com/datasets/yeanzc/telco-customer-churn-ibm-dataset/code>
 
+The vast majority of these analyses are plug-and-play, where default classifiers are run on the dataset, and then the results are analyzed and visualized in many ways. The analyses seem to be mainly focused on visualizating the data and building a single model, rather than comparing different models and preprocessing methods like we have done.
+
+Most of the analyses use at least one of Logistic Regression, Naive Bayes, Random Forest, or XGBoost, and most of the hyperparameters are tuned using out of the box tools. Only one analysis used cross-validation at all.
+
+Our models relied heavily on k-fold CV to tune hyperparameters and to prevent overfitting for predictive power. We used many models with varying computational intensity to see how these models compare, and included various preprocessing methods to evaluate their impact on predictive power.
+
+Additionally, among similar methods, our models seem to slightly outperform the average accuracy of just below 80%.
 
 ## Future research  (Relevant papers refer)
 In considering potential avenues for future research in analyzing a churn dataset, there are several sophisticated approaches that may be considered. One possibility is the implementation of artificial neural networks (ANN), which have shown promise in accurately predicting churn in previous studies. Another option is the utilization of bagging and boosting methods, which can help to mitigate issues of overfitting and improve overall classification performance.
@@ -202,7 +211,6 @@ In addition, feature engineering could be a valuable tool in understanding and p
 Furthermore, researching additional factors related to churn and incorporating them into models could help to improve predictive accuracy. Specifically, contextual factors, such as the customer's reason for using a particular service or product, could be considered in developing more effective models.
 
 Finally, there may be additional insights to be gleaned from further exploration of the churn dataset. For example, identifying specific subgroups of customers that are more likely to churn or investigating the relationship between customer satisfaction and churn could offer valuable insights for improving retention efforts.
-
 
 \newpage
 # Appendix
