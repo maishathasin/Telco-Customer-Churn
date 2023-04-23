@@ -133,7 +133,7 @@ Model & Accuracy & F1 label=0 & F1 label=1 & AUC & Hyperparameters \\ \hline
 Logistic regression & 0.84 & 0.89 & 0.65 & 0.88 & penalty = l1 ,C = 1\\
 Logistic regression & 0.84 & 0.89 & 0.64 & 0.878 & penalty = l1 ,C = 1\\
 Logistic regression + SMOTE & 0.84 & 0.89 & 0.70 & 0.878 & penalty = l2 ,C = 100\\
-SVM & (?) & (?) & (?)& &C = , Kernel, Gamma = , Degree =\\
+SVM & (0.82) & (0.88) & (0.65)& &C = 1, Kernel= rbf, Gamma = 0.1\\
 SVM + SMOTE & (?) & (?) & (?) & & C = , Kernel, Gamma = , Degree = \\
 KNN  & 0.80 & 0.89 & 0.71 & 0.878 & m = minkowski, n = 14, w = uniform\\
 KNN + SMOTE  & 0.81 & 0.87 & 0.65 & 0.878 & m = cosine, n = 16, w = uniform\\
