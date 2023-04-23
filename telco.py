@@ -88,7 +88,6 @@ class Dataset:
                 self.X_test[num_col_names]
             )
         
-
     def get_training_set(self):
         return self.X_train, self.y_train
 
