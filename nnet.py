@@ -84,6 +84,8 @@ def create_single_layer_nnet(load=True, smote=False, save=False):
     acc = ds.accuracy(y_pred)
     f1 = ds.f1(y_pred)
 
+    ds.report(y_pred)
+
     if save:
         ds.save_predictions("slp", y_pred_prob)
 
@@ -132,6 +134,8 @@ def create_multi_layer_nnet(load=True, smote=False, save=False):
     y_pred_prob = clf.predict_proba(ds.get_testing_set())[:, 1]
     acc = ds.accuracy(y_pred)
     f1 = ds.f1(y_pred)
+
+    ds.report(y_pred)
 
     if save:
         ds.save_predictions("mlp", y_pred_prob)

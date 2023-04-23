@@ -105,6 +105,8 @@ def create_tree(load=False, smote=False, save=False):
     acc = ds.accuracy(y_pred)
     f1 = ds.f1(y_pred)
 
+    ds.report(y_pred)
+
     # print(clf.get_n_leaves())
     # print(clf.get_depth())
     # print(y_pred_prob)
