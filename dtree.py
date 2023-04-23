@@ -113,8 +113,6 @@ def create_tree(load=False, smote=False, save=False):
     if save:
         ds.save_predictions("dtree+sm" if smote else "dtree", y_pred_prob)
 
-    # 0.8097, 0.5786 (smote=False)
-    # 0.8239, 0.6457 (smote=True)
     return (round(acc, 4), round(f1, 4))
 
 

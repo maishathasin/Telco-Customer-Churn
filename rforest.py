@@ -15,7 +15,9 @@ def create_random_forest(load=True, smote=False, save=False):
             'max_depth': list(range(1, 16))
         }]
         clf = GridSearchCV(
-            RandomForestClassifier(oob_score=True, n_jobs=-1, random_state=441),
+            RandomForestClassifier(
+            oob_score=True, n_jobs=-1, random_state=441
+        ),
             param_grid, cv=5, scoring=['accuracy', 'f1'], refit='accuracy'
         )
     elif smote:
@@ -45,8 +47,6 @@ def create_random_forest(load=True, smote=False, save=False):
     if save:
         ds.save_predictions("rf+sm" if smote else "rf", y_pred_prob)
     
-    # 0.8338, 0.6214 (d=8, smote=False)
-    # 0.8253, 0.6496 (d=11, smote=True)
     return (round(acc, 4), round(f1, 4))
 
 
