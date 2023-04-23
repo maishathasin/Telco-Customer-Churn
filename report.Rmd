@@ -233,7 +233,7 @@ Our models relied heavily on k-fold CV to tune hyperparameters and to prevent ov
 
 Additionally, among similar methods, our models seem to slightly outperform the average accuracy of just below 80%.
 
-## Future research  (Relevant papers refer)
+## Future research 
 In considering potential avenues for future research in analyzing a churn dataset, there are several sophisticated approaches that may be considered. One possibility is the implementation of artificial neural networks (ANN), which have shown promise in accurately predicting churn in previous studies. Another option is the utilization of bagging and boosting methods, which can help to mitigate issues of overfitting and improve overall classification performance.
 
 Moreover, ensemble methods, as outlined in classification papers, may also hold promise for effectively predicting churn. Such methods involve combining the predictions of multiple individual models, each with their own strengths and weaknesses, in order to arrive at a more accurate and robust overall prediction.
@@ -247,20 +247,20 @@ Finally, there may be additional insights to be gleaned from further exploration
 \newpage
 # Appendix
 
-![Figure 1](eda1.png)
+![ EDA](eda1.png)
 
-![Figure 2](eda2.png)
+![ EDA](eda2.png)
 
-![Figure 3](eda3.png)
+![EDA](eda3.png)
 
 
-![Figure 4](eda4.png)
+![EDA](eda4.png)
 
-![Figure 5: ](eda5.png)
+![EDA](eda5.png)
 
-![Figure 7](cont_charges.png)
+![EDA](cont_charges.png)
 
-![Figure 8: Showing where most customers are churning from, a large number of customers from LA](country_usa.png)
+![Showing where most customers are churning from, a large number of customers from LA](country_usa.png)
 ![Figure 9:Showing the number of features selected vs the Cross validation score](features.png)
 
 
@@ -288,3 +288,10 @@ General purpose Dataset class to unify the loading, preprocessing, and evaluatio
 ### Neural Network (Multi-layer Perceptron)
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE, code=readLines("nnet.py")}
 ```
+
+
+### Support Vector Machines
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE, code=readLines("svm_class.py")}
+```
+
+
