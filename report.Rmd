@@ -56,12 +56,35 @@ The third optional step is feature scaling. For our three numeric features, all 
 
 All three optional preprocessing steps are applied independently to the training and testing sets to ensure no leakage occurs. Additionally, all preprocessing steps and models are seeded whenever possible to ensure reproducibility and deterministic behavior.
 
-##Logistic Regression
-Logistic regression is a widely used algorithm in machine learning, especially for binary classification problems like churn cases.
- We modeled 2 logistic regression models using different feature engineering techniques one with raw data and one with Undersampling techniques.
+## Logistic Regression
+Logistic regression is a widely used algorithm in machine learning, especially for binary classification problems like churn cases. We modeled 2 logistic regression models using different feature engineering techniques one with raw data and one with Undersampling techniques.
+
  To find the best hyper parameters for each model, we used a grid search function in sklearn called GridSearchCV and standardized the data by splitting it into five folds for each model. We used two types of penalty, LASSO and Ridge regression, which correspond to l1 and l2 penalties, respectively for it's hyperparameters. We also tuned the regularization parameter C, where higher values of C indicate that the training data is more representative, while smaller C values imply that the training data is less representative.
+ 
 To further improve our models, we utilized the Recursive Feature Elimination (RFE) method, which eliminates features that reduce the cross-validation score recursively. By selecting only the most relevant features, RFE can help improve the model's accuracy, reduce overfitting, and enhance interpretability. 
 Each model was tested for accuracy, F1 score, and ROC score. To test for overfitting, we repeated the tuned model over 1000 samples and found its average accuracy score. 
+
+## KNN
+In our implementation of the K-Nearest Neighbors (KNN) algorithm, we employed the GridSearchCV method again  to determine the optimal hyperparameters . Specifically, we tuned the number of neighbors, considering various distance metrics such as Minkowski, Euclidean, Manhattan, and Cosine. The Minkowski distance metric is a generalized version of Manhattan and Euclidean distances in a vector norm space.
+
+The Minkowski distance between two points `p` and `q` in `n`-dimensional space is defined as:
+
+$$ \text{dist}_\text{M}(p,q)=\left(\sum_{i=1}^{n} |p_i - q_i|^r \right)^{1/r}$$
+where:
+- `p` and `q` are two points in n-dimensional space
+- `n` is the number of dimensions
+- `r` is a parameter that determines the order of the Minkowski distance
+
+In the special case where `r=1`, we get the Manhattan distance:
+$$ \text{dist}_\text{Manhattan}(p,q)=\sum_{i=1}^{n} |p_i - q_i|$$
+In the special case where `r=2`, we get the Euclidean distance:
+
+$$ \text{dist}_\text{Euclidean}(p,q)=\sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
+
+We additionally used to 2 different weight hyperparamters, ‘uniform’ and ‘distance’ The uniform weight parameter assigns equal weights to all data points, whereas the distance weight parameter assigns higher weights to closer neighbors and lower weights to farther neighbors
+
+We employed three different models that does the above hyper parameter optimization. The first model used raw data, the second model used Under sampling + MinMax scaling, and the third model used SMOTE + Robust Scaler a scaling that is robust to outliers (ref). We assessed the accuracy of each of these models  tested their accuracy and F1 score, as well as their ROC score.
+To test for overfitting, we repeated the tuned model over 1000  bootstrapped samples. 
 
 
 ## Decision Tree
@@ -97,6 +120,22 @@ Two versions of this model are fitted; one with the number of hidden layers fixe
 - Compare performance
 - Key graphs go here
 - Discuss performance, significant predictors
+
+| Model | Accuracy | F1 label = 0 | F1 label = 1 | F1 | Hyperparameters |
+|-------|----------|----------|----|----|----------------|
+| Logistic regression (raw) | 0.841 | 0.89 | 0.71 | ? | ['penalty':['l1','l2'], 
+              'C':[1, 10, 100, 1000]] |
+| Logistic regression (SMOTE + Scale) | 0.87 | 0.82 | 120 | 25 | K=7, Distance=Euclidean |
+| Model 3 | 0.83 | 0.76 | 95 | 18 | K=3, Distance=Manhattan |
+| Model 4 | 0.89 | 0.84 | 130 | 23 | K=9, Distance=Cosine |
+| Model 5 | 0.82 | 0.75 | 90 | 17 | K=5, Distance=Minkowski |
+| Model 6 | 0.88 | 0.83 | 125 | 21 | K=7, Distance=Euclidean |
+| Model 7 | 0.84 | 0.77 | 97 | 19 | K=3, Distance=Manhattan |
+| Model 8 | 0.90 | 0.85 | 135 | 22 | K=9, Distance=Cosine |
+| Model 9 | 0.81 | 0.74 | 88 | 16 | K=5, Distance=Minkowski |
+| Model 10 | 0.89 | 0.83 | 123 | 24 | K=7, Distance=Euclidean |
+| Model 11 | 0.85 | 0.78 | 98 | 18 | K=3, Distance=Manhattan |
+| Model 12 | 0.91 | 0.86 | 138 | 21 | K=9, Distance=Cosine |
 
 # Discussion
 - Discuss existing Kaggle models on this dataset
