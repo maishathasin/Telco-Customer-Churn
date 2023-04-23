@@ -40,6 +40,7 @@ def create_random_forest(load=True, smote=False, save=False):
     f1 = ds.f1(y_pred)
 
     ds.report(y_pred)
+    ds.heatmap(y_pred)
 
     if save:
         ds.save_predictions("rf+sm" if smote else "rf", y_pred_prob)

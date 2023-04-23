@@ -106,10 +106,7 @@ def create_tree(load=False, smote=False, save=False):
     f1 = ds.f1(y_pred)
 
     ds.report(y_pred)
-
-    # print(clf.get_n_leaves())
-    # print(clf.get_depth())
-    # print(y_pred_prob)
+    ds.heatmap(y_pred)
 
     if save:
         ds.save_predictions("dtree+sm" if smote else "dtree", y_pred_prob)

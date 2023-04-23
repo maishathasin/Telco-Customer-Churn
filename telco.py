@@ -3,9 +3,10 @@ import pandas as pd
 from imblearn.over_sampling import SMOTENC
 from imblearn.pipeline import make_pipeline
 from imblearn.under_sampling import RandomUnderSampler
+import seaborn as sns
 from sklearn.compose import make_column_transformer
-from sklearn.metrics import (RocCurveDisplay, accuracy_score, auc,
-                             classification_report, f1_score, roc_curve)
+from sklearn.metrics import (accuracy_score, auc, classification_report,
+                             confusion_matrix, f1_score, roc_curve)
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 
@@ -130,6 +131,17 @@ class Dataset:
 
         plt.legend(loc=0)
         plt.show()
+    
+    def heatmap(self, y_pred):
+        cm = confusion_matrix(self.y_test, y_pred)
+
+        cm_matrix = pd.DataFrame(
+            data=cm, columns=['Actual Positive:1', 'Actual Negative:0'], 
+            index=['Predict Positive:1', 'Predict Negative:0']
+        )
+
+        sns.heatmap(cm_matrix, annot=True, fmt='d')
+        plt.show()
 
     def save_predictions(self, filename, y_pred):
         pd.DataFrame(y_pred, columns=["y_pred"]) \
@@ -145,5 +157,10 @@ if __name__ == "__main__":
         "rf.csv": "Random Forest",
         "rf+sm.csv": "Random Forest with SMOTE",
         "slp.csv": "Single-Layer Perceptron",
-        "mlp.csv": "Multi-Layer Perceptron"
+        "mlp.csv": "Multi-Layer Perceptron",
+        "KNN_pred_prob.csv": "K-Nearest Neighbour (KNN)",
+        "KNN_pred_prob+smote.csv": "KNN with SMOTE",
+        "knn_pred_prob+smote+robustscaler.csv": "KNN with SMOTE and RobustScaler",
+        "LGR_pred_prob.csv": "Logistic Regression",
+        "LGR_pred_prob+smote.csv": "Logistic Regression with SMOTE",
     })
