@@ -172,4 +172,6 @@ if __name__ == "__main__":
         "knn_pred_prob+smote+robustscaler.csv": "KNN with SMOTE and RobustScaler",
         "LGR_pred_prob.csv": "Logistic Regression",
         "LGR_pred_prob+smote.csv": "Logistic Regression with SMOTE",
+        "new+svm.csv": "Support Vector Machine",
+        "new+smote+svm.csv": "Support Vector Machine with Smote"
     })
