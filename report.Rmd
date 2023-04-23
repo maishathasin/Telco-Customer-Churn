@@ -67,7 +67,7 @@ To further improve our models, we utilized the Recursive Feature Elimination (RF
 Each model was tested for accuracy, F1 score, and ROC score. To test for overfitting, we repeated the tuned model over 1000 samples and found its average accuracy score. 
 
 ## KNN
-In our implementation of the K-Nearest Neighbors (KNN) algorithm, we employed the GridSearchCV method again  to determine the optimal hyperparameters . Specifically, we tuned the number of neighbors, considering various distance metrics such as Minkowski, Euclidean, Manhattan, and Cosine. The Minkowski distance metric is a generalized version of Manhattan and Euclidean distances in a vector norm space.
+In our implementation of the K-Nearest Neighbors (KNN) algorithm, we employed the GridSearchCV method again  to determine the optimal hyperparameters . Specifically, we tuned the number of neighbors, considering various distance metrics such as Minkowski, Euclidean, Manhattan, and Cosine. The Minkowski distance metric is a generalized version of Manhattan and Euclidean distances in a vector norm space.[@sharma_2020]
 
 The Minkowski distance between two points `p` and `q` in `n`-dimensional space is defined as:
 
@@ -175,6 +175,11 @@ We also used weights to reduce the focus on the outliers, as increasing the numb
 
 While KNN is a powerful algorithm, it is more computationally intensive than Logistic Regression, making it less suitable for large datasets. In our EDA, we noticed that there were not too many outliers, which resulted in good accuracy. However, the algorithm was not very robust, indicating that it may not perform well with more outliers.
 
+## SVM
+
+![](test.jpg)
+
+
 ## Decision Tree
 For the Decision Tree model, we can see that SMOTE results in an increased value of $\alpha$. This might be because the base model isn't gaining enough value from splitting a node with few values with response 1, but the more balanced split after resampling can alleviate this problem, allowing the tree to justify an increased complexity.
 
@@ -193,7 +198,7 @@ However, after SMOTE was applied to both models, the advantage was largely reduc
 ## Existing analyses
 The IBM Telco dataset is also popular on Kaggle, including a few well-received analyses. The following link shows 24 other analyses of the same dataset: <https://www.kaggle.com/datasets/yeanzc/telco-customer-churn-ibm-dataset/code>
 
-The vast majority of these analyses are plug-and-play, where default classifiers are run on the dataset, and then the results are analyzed and visualized in many ways. The analyses seem to be mainly focused on visualizating the data and building a single model, rather than comparing different models and preprocessing methods like we have done.
+The vast majority of these analyses are plug-and-play, where default classifiers are run on the dataset, and then the results are analyzed and visualized in many ways. The analyses seem to be mainly focused on visualising and analysis the data to building a single model, rather than comparing different models and preprocessing methods like we have done.
 
 Most of the analyses use at least one of Logistic Regression, Naive Bayes, Random Forest, or XGBoost, and most of the hyperparameters are tuned using out of the box tools. Only one analysis used cross-validation at all.
 
