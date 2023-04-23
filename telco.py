@@ -127,9 +127,19 @@ class Dataset:
             y_pred = df["y_pred"].tolist()
             fpr, tpr, _ = roc_curve(self.y_test, y_pred)
             roc_auc = round(auc(fpr, tpr), 3)
-            plt.plot(fpr, tpr, label=f"{display_name}, auc="+str(roc_auc))
+            plt.plot(
+                fpr, tpr, label=f"{display_name}, auc="+str(roc_auc),
+                linewidth=0.8, alpha=0.7
+            )
+        plt.axline(
+            (0, 0), slope=1, color="black", linestyle=(0, (5, 5)),
+            linewidth=0.5
+        )
 
-        plt.legend(loc=0)
+        plt.title("ROC Curves")
+        plt.xlabel("False Positive Rate")
+        plt.ylabel("True Positive Rate")
+        plt.legend(loc=0, fontsize=8)
         plt.show()
     
     def heatmap(self, y_pred):
