@@ -79,6 +79,9 @@ We additionally used to 2 different weight hyperparamters, ‘uniform’ and ‘
 We employed three different models that does the above hyper parameter optimization. The first model used raw data, the second model used Under sampling + MinMax scaling, and the third model used SMOTE + Robust Scaler a scaling that is robust to outliers (ref). We assessed the accuracy of each of these models  tested their accuracy and F1 score, as well as their ROC score.
 To test for overfitting, we repeated the tuned model over 1000  bootstrapped samples. 
 
+## SVM
+We tuned SVM again with Grid Search CV to fine-tune its parameters. Specifically, we explored a variety of parameter combinations using a dictionary of values, consisting of the regularization parameter C and the kernel type.Where C is the 'hardness' of the margins the higher C means SVM will be more robust to outliers. For the linear kernel, we tested C values of 1, 10, 100, and 1000. For the non-linear kernels, we additionally investigated the gamma parameter for the radial basis function (RBF) and the degree parameter for the polynomial kernel, with gamma values of 0.1 to 0.9 and degree values of 2, 3, and 4, respectively.In addition, we evaluated the effectiveness of both raw data and SMOTE  + scale data, repeating the entire process for both approaches. We calculated the accuracy, class F1 score etc. To test for overfitting, we repeated the tuned model over 100  bootstrapped samples. 
+
 
 ## Decision Tree
 The Decision Tree model is implemented with sklearn's DecisionTreeClassifier, and using one-hot encoded data. First, we tune the hyperparameter $\alpha$, the tuning parameter used in cost-complexity pruning.
