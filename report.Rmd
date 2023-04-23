@@ -122,10 +122,6 @@ Finally, a Multi-Layer Perceptron is fit on the entire training set with the cho
 Two versions of this model are fitted; one with the number of hidden layers fixed to 1 (i.e. a single layer perceptron), and another without this restriction.
 
 # Results
-- Compare performance
-- Key graphs go here
-- Discuss performance, significant predictors?
-
 Below is a summary of each fitted model, the accuracy, f1 scores for each label, the area under the ROC curve (AUC), and the tuned hyperparameters.
 
 \begin{tabular}{l l l l l l} \hline
@@ -183,17 +179,24 @@ The Decision Tree was also somewhat computationally intensive to tune, but this 
 Decision Trees are also popular for their interpretability. Although we have not included the actual trees due to their size (depth 9, 31 terminal nodes for the Decision Tree with SMOTE), these can be used to identify the most important variates for prediction.
 
 ## Random Forest
-We found that our Random Forest model outperformed the single Decision Tree model, which is the advantage of an ensemble method. The Random Forest method uses many weak learners to improve the predictive power by decreasing variance, so it makes sense that the Random Forest model outperformed the Decision Tree when SMOTE was not applied.
+We found that our Random Forest model outperformed the single Decision Tree model, which is the advantage of an ensemble method. The Random Forest method uses many weak learners to improve the predictive power by decreasing variance, so it makes sense that the Random Forest model outperformed the Decision Tree, especially in F1 score for the minority class, when SMOTE was not applied.
 
 However, after SMOTE was applied to both models, the advantage was largely reduced, with Random Forest only holding a slight edge. It was also less computationally intensive than the Decision Tree, but it loses the interpretability of a single Decision Tree.
 
 ## Multi-Layer Perceptron
+Neural networks in general are good at handling non-linear decision boundaries and complex relationships, and can perform well even with a large number of features. However, our dataset does not seem to be complex enough or have enough features for its advantages to shine.
+
+On the other hand, neural networks are usually far more computationally intensive, with our multi-layer perceptron model taking multiple hours of computation to tune hyperparameters. They also have next to no interpretability, making them less suitable for situations where you might want to identify causal relationships as well as classify new data.
+
+Interestingly, both the single-layer perceptron and multi-layer perceptron tuning towards relatively narrow hidden layers (width 5), outcompeting more complex models. It can also be argued that the single-layer perceptron slightly outperforms the multi-layer perceptron, though in any case the difference is very slight.
+
+Larger models also usually require more data to train, so it could be the case that there isn't enough data for the larger models to match the performance of the simpler models. In this case, we can see an application of Occam's Razor, as the simple single-layer perceptron performs as well as any of our other models.
 
 # Discussion
 ## Existing analyses
-The IBM Telco dataset is also popular on Kaggle, including a few well-received analyses. The following link shows 24 other analyses of the same dataset: <https://www.kaggle.com/datasets/yeanzc/telco-customer-churn-ibm-dataset/code>
+The IBM Telco dataset is also popular on Kaggle, including a few high quality analyses. The following link shows 24 other analyses of the same dataset: <https://www.kaggle.com/datasets/yeanzc/telco-customer-churn-ibm-dataset/code>
 
-The vast majority of these analyses are plug-and-play, where default classifiers are run on the dataset, and then the results are analyzed and visualized in many ways. The analyses seem to be mainly focused on visualizating the data and building a single model, rather than comparing different models and preprocessing methods like we have done.
+The vast majority of these analyses are plug-and-play, where default classifiers are run on the dataset, and then the results are analyzed and visualized in many ways. The analyses also seem to be mainly focused on visualizating the data and building a single model, rather than comparing different models and preprocessing methods like we have done.
 
 Most of the analyses use at least one of Logistic Regression, Naive Bayes, Random Forest, or XGBoost, and most of the hyperparameters are tuned using out of the box tools. Only one analysis used cross-validation at all.
 
