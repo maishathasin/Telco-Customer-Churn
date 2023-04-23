@@ -133,7 +133,6 @@ Model & Accuracy & F1 label=0 & F1 label=1 & AUC & Hyperparameters \\ \hline
 Logistic regression & 0.84 & 0.89 & 0.65 & 0.88 & penalty = l1 ,C = 1\\
 Logistic regression & 0.84 & 0.89 & 0.64 & 0.878 & penalty = l1 ,C = 1\\
 Logistic regression + SMOTE & 0.84 & 0.89 & 0.70 & 0.878 & penalty = l2 ,C = 100\\
->>>>>>> 0a192836fa8fbbb37f1a951a8b46120f5b5eae6f
 SVM & (?) & (?) & (?)& &C = , Kernel, Gamma = , Degree =\\
 SVM + SMOTE & (?) & (?) & (?) & & C = , Kernel, Gamma = , Degree = \\
 KNN  & 0.80 & 0.89 & 0.71 & 0.878 & m = minkowski, n = 14, w = uniform\\
@@ -161,6 +160,27 @@ The F1 score is computed as $2 \cdot \frac{\text{precision} \cdot \text{recall}}
 Recalling that a response of 1 indicates that a customer has churned, the F1 score for the response of 1 is of importance, as we would like to correctly identify high risk customers (recall) and avoid spending extra resource on low risk customers (precision). Noting also that it is the minority class, it is beneficial to use SMOTE as it increases the performance of the models on the minority class without impacting the overall accuracy much at all.
 
 - Talk about specific models here
+
+### Logistic regression
+
+-light weight model 
+-performs well cause the dataset is not very complicated and we also reduce the number of features 
+Our team utilized logistic regression as our classification model for predicting churn, given its binary nature and speedy computational efficiency. We conducted an in-depth analysis of the model's performance using various techniques such as SMOTE, hyper-parameter tuning, bootstrapped values, and recursive feature elimination to ensure that it can produce reliable results with high accuracy.
+
+We observed that logistic regression performed exceptionally well when SMOTE was applied, resulting in the highest accuracy scores. The model's hyperparameters were adjusted to prevent overfitting, ensuring that the model generalizes well on unseen data. Moreover, logistic regression produced very few false positives and negatives, which is a desirable characteristic for a churn prediction model.
+
+To further improve the performance of the model, we employed recursive feature elimination, which helped to reduce the noise in the data by removing irrelevant features. The results showed that the model performed optimally with 29/30 features, correctly predicting labels with 84% accuracy and producing no false positives or negatives. 
+
+The model's ability to predict correctly is attributed to the abundance of values labeled '0' in the dataset. These findings demonstrate the robustness of our logistic regression model for churn prediction and its suitability for real-world applications.
+
+### KNN
+It is a non-parametric algorithm that predicts the label of a new data point based on the labels of its K nearest neighbors in the training set. KNN uses various distance metrics such as Minkowski, Cosine, and Euclidean to measure the distance between the points. However, it is known to be sensitive to outliers, and thus, we used the robust scalar to mitigate this issue. By using the robust scalar, we remove the median and scale the data according to the quantile range (Interquartile Range) to make it more overfit to the data. This technique is helpful as the outliers may contain important information. The downside is that the AUC score decreased, making it more robust to outliers.
+
+We also used weights to reduce the focus on the outliers, as increasing the number of neighbors leads to more overfitting, resulting in decreased F1 scores for both class labels. We found that the "curse of dimensionality" did not occur in our dataset, as we reduced the number of features. However, KNN is sensitive to the scale of the features, as the distance metric used in the algorithm can be affected by the relative magnitude of the features. Therefore, we need to ensure that the features are appropriately scaled to achieve accurate results.
+
+While KNN is a powerful algorithm, it is more computationally intensive than Logistic Regression, making it less suitable for large datasets. In our EDA, we noticed that there were not too many outliers, which resulted in good accuracy. However, the algorithm was not very robust, indicating that it may not perform well with more outliers.
+
+
 
 For the Decision Tree model, we can see that SMOTE results in an increased value of $\alpha$. This indicates that even with k-fold CV, the base Decision Tree model might still be overfitting somewhat, as the Decision Tree with SMOTE model performs better overall with a smaller subtree. It may be that SMOTE is only countering the tendency to classify towards the majority class and that just so happens to be with a larger penalty, as it is difficult to draw a causal link between the two.
 
