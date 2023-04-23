@@ -1,11 +1,13 @@
+import matplotlib.pyplot as plt
+import pandas as pd
 from imblearn.over_sampling import SMOTENC
-from imblearn.under_sampling import RandomUnderSampler
 from imblearn.pipeline import make_pipeline
+from imblearn.under_sampling import RandomUnderSampler
 from sklearn.compose import make_column_transformer
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import (RocCurveDisplay, accuracy_score, auc,
+                             classification_report, f1_score, roc_curve)
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
-import pandas as pd
 
 
 class Dataset:
@@ -105,11 +107,43 @@ class Dataset:
             return f1_score(self.y_test, y_pred)
     
     def acc_f1(self, y_pred, train=False):
+        y_pred = [0 if y < 0.5 else 1 for y in y_pred]
         return (
             round(self.accuracy(y_pred, train=train), 4),
             round(self.f1(y_pred, train=train), 4)
         )
 
+    def report(self, y_pred):
+        print(classification_report(self.y_test, y_pred))
+
+    
+    def roc_curve(self, csv_dict):
+        """
+        csv_dict: keys are filepaths and values are display names
+        """
+        for filename, display_name in csv_dict.items():
+            df = pd.read_csv(filename)
+            y_pred = df["y_pred"].tolist()
+            fpr, tpr, _ = roc_curve(self.y_test, y_pred)
+            roc_auc = round(auc(fpr, tpr), 3)
+            plt.plot(fpr, tpr, label=f"{display_name}, auc="+str(roc_auc))
+
+        plt.legend(loc=0)
+        plt.show()
+
     def save_predictions(self, filename, y_pred):
         pd.DataFrame(y_pred, columns=["y_pred"]) \
             .to_csv(f"{filename}.csv", index=False)
+
+
+if __name__ == "__main__":
+    ds = Dataset()
+
+    ds.roc_curve({
+        "dtree.csv": "Decision Tree",
+        "dtree+sm.csv": "Decision Tree with SMOTE",
+        "rf.csv": "Random Forest",
+        "rf+sm.csv": "Random Forest with SMOTE",
+        "slp.csv": "Single-Layer Perceptron",
+        "mlp.csv": "Multi-Layer Perceptron"
+    })
