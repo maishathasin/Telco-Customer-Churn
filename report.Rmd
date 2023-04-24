@@ -96,7 +96,7 @@ $$ \text{dist}_\text{Euclidean}(p,q)=\sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
 
 We additionally used 2 different weight hyperparameters, ‘uniform’ and ‘distance’. The uniform weight parameter assigns equal weights to all data points, whereas the distance weight parameter assigns higher weights to closer neighbours and lower weights to farther neighbours.
 
-We employed three different models that does the above hyperparameter optimization. The first model used raw data, the second model used undersampling + MinMax scaling, and the third model used SMOTE + Robust Scaler, a scaling that is robust to outliers (ref). We assessed the accuracy of each of these models, and tested their accuracy, F1 score, and their AUC score.
+We employed three different models that does the above hyperparameter optimization. The first model used raw data, the second model used undersampling + MinMax scaling, and the third model used SMOTE + Robust Scaler, a scaling that is robust to outliers. We assessed the accuracy of each of these models, and tested their accuracy, F1 score, and their AUC score.
 To test for overfitting, we repeated the tuned model over 1000 bootstrapped samples. 
 
 ## SVM
