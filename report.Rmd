@@ -43,18 +43,13 @@ Finally, the response variable is Churn Value, binary on whether the customer le
 
 ## Exploratory Data Analysis (EDA)
 
-![Figure 6: ](correlation.png)
+![Feature Correlation Heatmap](correlation.png)
 
-There are some analysis from our EDA that are interesting: 
+There are some analyses from our EDA that are of note:
 
-From the Figure 4, 5, 6, and 7 (see Appendix) we can infer several correlations:
+From Figures 1, 4, 5, 6, and 7 (see Appendix) we can infer several correlations: those who don't have tech support, device protection, and those with month-to-month contracts are likely to churn. This can be because the customer has not committed to the company, and so there is a correlation between these features.
 
-- Those who don't have Tech support are more likely churn
-- Customers with month-month contracts are likely to churn, this is obvious as the customer is not committed so there is a direct correlation between churn and contract. The same goes for Tech support and Device protection dimensions
-- The same goes for Tech support and Device protection dimensions
-
-- From figure 7 Most customers are senior citizens and young people, they are most likely to be dependents, thus we can also infer that they are correlated . 
--  From Figure 7 we can see that there are no clear outliers in the CLTV, this is good because we can use classification methods like KNN, Logistic regression without worrying too much about the outliers causing the data to over fit.  
+From Figure 9 we can see that there are no clear outliers in the data, this is good because we can use classification methods like KNN and Logistic regression without worrying too much about the outliers causing the models to overfit.
 
 Correlation can lead to multicollinearity, where two or more predictors in a model are highly correlated. This can result in unstable estimates of the coefficients and make it difficult to interpret the individual effect of each predictor. Multicollinearity can also reduce the model's predictive accuracy and lead to overfitting. According to Girish Chandrashekar [@CHANDRASHEKAR201416] "when two features are perfectly correlated, only one feature is sufficient to describe the data. The dependent variables provide no extra information about the classes and thus serve as noise for the predictor. This means that the total information content can be obtained from fewer unique features which contain maximum discrimination information about the classes. Hence by eliminating the dependent variables, the amount of data can be reduced which can lead to improvement in the classification performance." Thus the best way forward is to reduce correlated features by making new features that capture the data of the correlated features or eliminate them using dimensionality reduction techniques like Principal component analysis, Best subset selection etc. 
 
@@ -137,6 +132,7 @@ Finally, a Multi-Layer Perceptron is fit on the entire training set with the cho
 
 Two versions of this model are fitted; one with the number of hidden layers fixed to 1 (i.e. a single layer perceptron), and another without this restriction.
 
+\newpage
 # Results
 Below is a summary of each fitted model, the accuracy, f1 scores for each label, the area under the ROC curve (AUC), and the tuned hyperparameters.
 
@@ -256,25 +252,26 @@ Finally, there may be additional insights to be gleaned from further exploration
 
 <div id="refs"></div>
 
+\newpage
 ## Extra Figures
 
-![ EDA](eda1.png)
+![Response Distribution for Payment Method, Streaming TV, and Gender](eda1.png)
 
-![ EDA](eda2.png)
+![Response Distribution for Contract, Tech Support, and Partner](eda2.png)
 
-![EDA](eda3.png)
+![Response Distribution for Phone Service, Multiple Lines, and Internet Service](eda3.png)
 
+![Response Distribution for Online Security, Online Backup, and Device Protection](eda4.png)
 
-![EDA](eda4.png)
+![Feature Distribution for Senior Citizens across the Payment Method labels](eda5.png)
 
-![EDA](eda5.png)
+![Box and Whiskers and Histogram plots for Monthly Charges, Total Charges, CLTV, and Tenure Months](cont_charges.png)
 
-![EDA](cont_charges.png)
+![Location map for churn labels](country_usa.png)
 
-![Showing where most customers are churning from, a large number of customers from LA](country_usa.png)
+![The number of features selected vs the Cross Validation score for Recursive Feature Elimination in Logistic Regression](features.png)
 
-![Figure 9:Showing the number of features selected vs the Cross validation score](features.png)
-
+\newpage
 ## Code
 All of the code below can be found with the submission of this report.
 
