@@ -31,7 +31,7 @@ Nevertheless, it may be possible to predict customer churn from quantitative cus
 Given qualitative customer data, we would like to compare the predictive ability of multiple statistical models on the same dataset, as well as explore some pre-processing techniques to improve accuracy.
 
 ## Dataset
-The Telco Customer Churn datset, provided by IBM, contains information about a fictional telecommunications (telco) company which provided home phone and internet services to 7043 customers. The dataset provides demographic and business-related metrics for each customer, as well as identifying whether the customer switched providers (customer churn).
+The Telco Customer Churn dataset, provided by IBM, contains information about a fictional telecommunications (telco) company which provided home phone and internet services to 7043 customers. The dataset provides demographic and business-related metrics for each customer, as well as identifying whether the customer switched providers (customer churn).
 
 The dataset can be downloaded from the following link: <https://accelerator.ca.analytics.ibm.com/bi/?perspective=authoring&pathRef=.public_folders%2FIBM%2BAccelerator%2BCatalog%2FContent%2FDAT00067>
 
@@ -47,16 +47,16 @@ Finally, the response variable is Churn Value, binary on whether the customer le
 
 There are some analysis from our EDA that are interesting: 
 
-From the Figure 2, 3, 4 and 5 we can infer several correlations 
+From the Figure 4, 5, 6, and 7 (see Appendix) we can infer several correlations:
 
 - Those who don't have Tech support are more likely churn
-- Customers with month-month contracts are likely to churn, this is obvious as the customer is not commited so there is a direct correlation between churn and contract. The same goes for Tech support and Device protection dimensions
+- Customers with month-month contracts are likely to churn, this is obvious as the customer is not committed so there is a direct correlation between churn and contract. The same goes for Tech support and Device protection dimensions
 - The same goes for Tech support and Device protection dimensions
 
-- From figure 7 Most customers are senior citizens and young people , they are most likely to be dependents, thus we can also infer that they are correlated . 
--  From Figure 7 we can see that there are no clear outliers in the CLTV, this is good because we can use classficiation methods like KNN, Logistic regression without worrying too much about the outliers causing the data to over fit.  
+- From figure 7 Most customers are senior citizens and young people, they are most likely to be dependents, thus we can also infer that they are correlated . 
+-  From Figure 7 we can see that there are no clear outliers in the CLTV, this is good because we can use classification methods like KNN, Logistic regression without worrying too much about the outliers causing the data to over fit.  
 
-Correlation can lead to multicollinearity, where two or more predictors in a model are highly correlated. This can result in unstable estimates of the coefficients and make it difficult to interpret the individual effect of each predictor. Multicollinearity can also reduce the model's predictive accuracy and lead to overfitting.According to Girish Chandrashekar [@CHANDRASHEKAR201416] "when two features are perfectly correlated, only one feature is sufficient to describe the data. The dependent variables provide no extra information about the classes and thus serve as noise for the predictor. This means that the total information content can be obtained from fewer unique features which contain maximum discrimination information about the classes. Hence by eliminating the dependent variables, the amount of data can be reduced which can lead to improvement in the classification performance." Thus the best way forward is to reduce correlated features by making new features that capture the data of the correlated features or eliminate them using dimensionality reduction techniques like Principal component analysis, Best subset selection etc. 
+Correlation can lead to multicollinearity, where two or more predictors in a model are highly correlated. This can result in unstable estimates of the coefficients and make it difficult to interpret the individual effect of each predictor. Multicollinearity can also reduce the model's predictive accuracy and lead to overfitting. According to Girish Chandrashekar [@CHANDRASHEKAR201416] "when two features are perfectly correlated, only one feature is sufficient to describe the data. The dependent variables provide no extra information about the classes and thus serve as noise for the predictor. This means that the total information content can be obtained from fewer unique features which contain maximum discrimination information about the classes. Hence by eliminating the dependent variables, the amount of data can be reduced which can lead to improvement in the classification performance." Thus the best way forward is to reduce correlated features by making new features that capture the data of the correlated features or eliminate them using dimensionality reduction techniques like Principal component analysis, Best subset selection etc. 
 
 Correlation can lead to the inclusion of redundant information in the model. If two predictors are highly correlated, they may provide similar information to the model, and including both predictors may not improve the model's performance. This can result in unnecessarily complex models and reduce the model's interpretability.
 
@@ -75,38 +75,38 @@ The third optional step is feature scaling. For our three numeric features, all 
 All three preprocessing steps are applied independently to the training and testing sets to ensure no leakage occurs (specifically for SMOTE, but also for feature scaling). Additionally, all preprocessing steps and models are seeded whenever possible to ensure reproducibility and deterministic behavior.
 
 ## Logistic Regression
-Logistic regression is a widely used algorithm in machine learning, especially for binary classification problems like churn cases. We modeled 2 logistic regression models using different feature engineering techniques one with raw data and one with Undersampling techniques.
+Logistic regression is a widely used algorithm in machine learning, especially for binary classification problems like churn cases. We modeled 2 logistic regression models using different feature engineering techniques; one with raw data and one with undersampling techniques.
 
-To find the best hyper parameters for each model, we used a grid search function in sklearn called GridSearchCV and standardized the data by splitting it into five folds for each model. We used two types of penalty, LASSO and Ridge regression, which correspond to l1 and l2 penalties, respectively for it's hyperparameters. We also tuned the regularization parameter C, where higher values of C indicate that the training data is more representative, while smaller C values imply that the training data is less representative of actual data.
+To find the best hyperparameters for each model, we used a grid search function in sklearn (a python package, also called scikit-learn) called GridSearchCV and standardized the data by splitting it into five folds for each model. We used two types of penalty, LASSO and Ridge regression, which correspond to l1 and l2 penalties respectively, for its hyperparameters. We also tuned the regularization parameter C, where higher values of C indicate that the training data is more representative, while smaller C values imply that the training data is less representative of actual data.
  
 To further improve our models, we utilized the Recursive Feature Elimination (RFE) method, which eliminates features that reduce the cross-validation score recursively. By selecting only the most relevant features, RFE can help improve the model's accuracy, reduce overfitting, and enhance interpretability. 
 Each model was tested for accuracy, F1 score, and ROC score. To test for overfitting, we repeated the tuned model over 1000 samples and found its average accuracy score. 
 
 ## KNN
-In our implementation of the K-Nearest Neighbors (KNN) algorithm, we employed the GridSearchCV method again  to determine the optimal hyperparameters . Specifically, we tuned the number of neighbors, considering various distance metrics such as Minkowski, Euclidean, Manhattan, and Cosine. The Minkowski distance metric is a generalized version of Manhattan and Euclidean distances in a vector norm space.[@Cunningham_2021]
+In our implementation of the K-Nearest Neighbours (KNN) algorithm, we employed the GridSearchCV method again to determine the optimal hyperparameters . Specifically, we tuned the number of neighbours, considering various distance metrics such as Minkowski, Euclidean, Manhattan, and Cosine. The Minkowski distance metric is a generalized version of Manhattan and Euclidean distances in a vector norm space [@Cunningham_2021].
 
-The Minkowski distance between two points `p` and `q` in `n`-dimensional space is defined as:
+The Minkowski distance between two points $p$ and $q$ in $n$-dimensional space is defined as:
 
 $$ \text{dist}_\text{M}(p,q)=\left(\sum_{i=1}^{n} |p_i - q_i|^r \right)^{1/r}$$
 where:
-- `p` and `q` are two points in n-dimensional space
-- `n` is the number of dimensions
-- `r` is a parameter that determines the order of the Minkowski distance
+- $p$ and $q$ are two points in n-dimensional space
+- $n$ is the number of dimensions
+- $r$ is a parameter that determines the order of the Minkowski distance
 
-In the special case where `r=1`, we get the Manhattan distance:
+In the special case where $r=1$, we get the Manhattan distance:
 $$ \text{dist}_\text{Manhattan}(p,q)=\sum_{i=1}^{n} |p_i - q_i|$$
-In the special case where `r=2`, we get the Euclidean distance:
 
+In the special case where $r=2$, we get the Euclidean distance:
 $$ \text{dist}_\text{Euclidean}(p,q)=\sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
 
-We additionally used to 2 different weight hyperparamters, ‘uniform’ and ‘distance’ The uniform weight parameter assigns equal weights to all data points, whereas the distance weight parameter assigns higher weights to closer neighbors and lower weights to farther neighbors
+We additionally used 2 different weight hyperparameters, ‘uniform’ and ‘distance’. The uniform weight parameter assigns equal weights to all data points, whereas the distance weight parameter assigns higher weights to closer neighbours and lower weights to farther neighbours.
 
-We employed three different models that does the above hyper parameter optimization. The first model used raw data, the second model used Under sampling + MinMax scaling, and the third model used SMOTE + Robust Scaler a scaling that is robust to outliers (ref). We assessed the accuracy of each of these models  tested their accuracy and F1 score, as well as their ROC score.
-To test for overfitting, we repeated the tuned model over 1000  bootstrapped samples. 
+We employed three different models that does the above hyperparameter optimization. The first model used raw data, the second model used undersampling + MinMax scaling, and the third model used SMOTE + Robust Scaler, a scaling that is robust to outliers (ref). We assessed the accuracy of each of these models, and tested their accuracy, F1 score, and their AUC score.
+To test for overfitting, we repeated the tuned model over 1000 bootstrapped samples. 
 
 ## SVM
-"SVM in classifies such a way that the existing separation (margin) between the decision borders is maximized in a highly dimensional space called the feature space. This classification strategy minimizes the classification errors of the training data and obtains a better generalization ability"[@CERVANTES2020189]
-We tuned SVM with Grid Search CV to fine-tune its parameters. Specifically, we explored a variety of parameter combinations using a dictionary of values, consisting of the regularization parameter C and the kernel type.Where C is the 'hardness' of the margins the higher C means SVM will be more robust to outliers (i.e larger space between margins). For the linear kernel, we tested C values of 1, 10, 100, and 1000. For the non-linear kernels, we additionally investigated the gamma parameter for the radial basis function (RBF) and the degree parameter for the polynomial kernel, with gamma values of 0.1 to 0.9 and degree values of 2, 3, and 4, respectively.In addition, we evaluated the effectiveness of both raw data and SMOTE  + scale data, repeating the entire process for both approaches. We calculated the accuracy, class F1 score etc. To test for overfitting, we repeated the tuned model with 1000  bootstrapped samples. 
+"SVM classifies in such a way that the existing separation (margin) between the decision borders is maximized in a highly dimensional space called the feature space. This classification strategy minimizes the classification errors of the training data and obtains a better generalization ability" [@CERVANTES2020189].
+We tuned SVM with Grid Search CV to fine-tune its parameters. Specifically, we explored a variety of parameter combinations using a dictionary of values, consisting of the regularization parameter C and the kernel type.Where C is the 'hardness' of the margins the higher C means SVM will be more robust to outliers (i.e larger space between margins). For the linear kernel, we tested C values of 1, 10, 100, and 1000. For the non-linear kernels, we additionally investigated the gamma parameter for the radial basis function (RBF) and the degree parameter for the polynomial kernel, with gamma values of 0.1 to 0.9 and degree values of 2, 3, and 4, respectively. In addition, we evaluated the effectiveness of both raw data and SMOTE + scaled data, repeating the entire process for both approaches. We calculated the accuracy, class F1 score etc. To test for overfitting, we repeated the tuned model with 1000 bootstrapped samples. 
 
 ## Decision Tree
 The Decision Tree model is implemented with sklearn's DecisionTreeClassifier, and using one-hot encoded data. First, we tune the hyperparameter $\alpha$, the tuning parameter used in cost-complexity pruning. A larger value of $\alpha$, a complexity limit, corresponds to a more complex tree with less pruning, and a lower value of $\alpha$ corresponds to a less complex tree with more pruning.
@@ -142,8 +142,8 @@ Below is a summary of each fitted model, the accuracy, f1 scores for each label,
 
 \begin{tabular}{l l l l l l} \hline
 Model & Accuracy & F1 label=0 & F1 label=1 & AUC & Optimized Hyperparameters \\ \hline
-Logistic regression & 0.84 & 0.89 & 0.64 & 0.878 & penalty = l1 ,C = 1 \\
-Logistic regression + SMOTE & 0.84 & 0.89 & 0.70 & 0.878 & penalty = l2 ,C = 100 \\
+Logistic regression & 0.84 & 0.89 & 0.64 & 0.878 & penalty = l1, C = 1 \\
+Logistic regression + SMOTE & 0.84 & 0.89 & 0.70 & 0.878 & penalty = l2, C = 100 \\
 SVM & 0.77 & 0.86 & 0.27& 0.751 &C = 1, Kernel= rbf, Gamma = 0.1 \\
 SVM + SMOTE & 0.82 & 0.88 & 0.65 &0.862 &C = 1, Kernel= rbf, Gamma = 0.1 \\
 KNN  & 0.80 & 0.89 & 0.71 & 0.878 & m = Minkowski, n = 14, w = uniform \\
@@ -175,26 +175,28 @@ The F1 score is computed as $2 \cdot \frac{\text{precision} \cdot \text{recall}}
 Recalling that a response of 1 indicates that a customer has churned, the F1 score for the response of 1 is of importance, as we would like to correctly identify high risk customers (recall) and avoid spending extra resource on low risk customers (precision). Noting also that it is the minority class, it is beneficial to use SMOTE as it increases the performance of the models on the minority class without impacting the overall accuracy much at all.
 
 ## Logistic regression
-We utilized logistic regression as our classification model for predicting churn, given its binary nature and speedy computational efficiency. We conducted an in-depth analysis of the model's performance using various techniques such as SMOTE, hyper-parameter tuning, bootstrapped values, and recursive feature elimination to ensure that it can produce reliable results with high accuracy.In logistic regression, RFE is used to iteratively remove the least significant features from the feature set until the desired number of features is achieved or until there is no further improvement in the model performance.[@Misra_2020] We can see how from Figure 9 how the features change with the cross validation score. We observed that logistic regression performed exceptionally well when SMOTE and RFE was applied, resulting in the highest accuracy scores. This works because Logistic regression estimates the coefficients by maximum likelihood estimation (MLE). MLE is a method that seeks to find the values of the coefficients that maximize the likelihood of observing the data given the model. In other words, it finds the values of the coefficients that make the predicted probabilities of the model as close as possible to the actual values of the outcome variable in the dataset .Combining both approaches by fixing the unbalanced data and using RFE improves the performance of the logistic regression model by reducing bias and identifying the most important features for predicting the outcome variable, leading to a more accurate and robust model. 
+We utilized logistic regression as one of our classification model for predicting churn, given its binary nature and speedy computational efficiency. We conducted an in-depth analysis of the model's performance using various techniques such as SMOTE, hyper-parameter tuning, bootstrapped values, and recursive feature elimination to ensure that it can produce reliable results with high accuracy. In logistic regression, RFE is used to iteratively remove the least significant features from the feature set until the desired number of features is achieved or until there is no further improvement in the model performance [@Misra_2020]. We can see how from Figure 11 (appendix) how the features change with the cross validation score. We observed that logistic regression performed exceptionally well when SMOTE and RFE was applied, resulting in the highest accuracy scores. This works because logistic regression estimates the coefficients by maximum likelihood estimation (MLE). MLE is a method that seeks to find the values of the coefficients that maximize the likelihood of observing the data given the model. In other words, it finds the values of the coefficients that make the predicted probabilities of the model as close as possible to the actual values of the outcome variable in the dataset. Combining both approaches by fixing the unbalanced data and using RFE improves the performance of the logistic regression model by reducing bias and identifying the most important features for predicting the outcome variable, leading to a more accurate and robust model. 
 
 ## KNN
-The k-Nearest Neighbors (KNN) algorithm is a non-parametric method that predicts the label of a new data point by relying on the labels of its K nearest neighbors in the training set. KNN employs various distance metrics, including Minkowski, Cosine, and Euclidean, to measure the distance between the points, and as such, is sensitive to variations in the distance metric used. However, it is also known to be sensitive to outliers, which can negatively impact the model's accuracy. To mitigate this issue, we implemented a robust scalar approach that removes the median and scales the data according to the quantile range (Interquartile Range).By being more robust to outliers the KNN model reduces the amount of neighbours it creates by not classifying every similar distances. This technique reduces the influence of outliers, while also preserving any valuable information that the outliers may contain. It is worth noting, however, that the use of the robust scalar technique may decrease the AUC score, but can lead to improved robustness to outliers.
+The k-Nearest Neighbours (KNN) algorithm is a non-parametric method that predicts the label of a new data point by relying on the labels of its K nearest neighbours in the training set. KNN employs various distance metrics, including Minkowski, Cosine, and Euclidean, to measure the distance between the points, and as such, is sensitive to variations in the distance metric used. However, it is also known to be sensitive to outliers, which can negatively impact the model's accuracy. To mitigate this issue, we implemented a robust scalar approach that removes the median and scales the data according to the quantile range (Interquartile Range). By being more robust to outliers the KNN model reduces the amount of neighbours it creates by not classifying every similar distances. This technique reduces the influence of outliers, while also preserving any valuable information that the outliers may contain. It is worth noting, however, that the use of the robust scalar technique may decrease the AUC score, but can lead to improved robustness to outliers.
 
-Additionally, we utilized weights to reduce the emphasis on outliers as increasing the number of neighbors can sometimes result in overfitting, which can lead to decreased F1 scores for both class labels. However, the use of weights also has the potential to increase overfitting if the weights are not carefully chosen.
+Additionally, we utilized weights to reduce the emphasis on outliers as increasing the number of neighbours can sometimes result in overfitting, which can lead to decreased F1 scores for both class labels. However, the use of weights also has the potential to increase overfitting if the weights are not carefully chosen.
 
-Our experimentation revealed that the "curse of dimensionality" did not affect our dataset, as we reduced the number of features. Nevertheless, KNN remains sensitive to feature scaling since the distance metric used in the algorithm can be influenced by the relative magnitudes of the features. Therefore, it is crucial to ensure that the features are appropriately scaled to achieve accurate results.
+Our experimentation revealed that the "curse of dimensionality" did not affect our dataset, as we reduced the number of features to a manageable level. Nevertheless, KNN remains sensitive to feature scaling since the distance metric used in the algorithm can be influenced by the relative magnitudes of the features. Therefore, it is crucial to ensure that the features are appropriately scaled to achieve accurate results.
 
 Although KNN is a powerful algorithm, it is computationally intensive, making it less suitable for large datasets. In our exploratory data analysis (EDA), we noted that the number of outliers was relatively low, leading to favorable accuracy. However, the algorithm was not very robust, suggesting that it may not perform well with a significant number of outliers in the future.
 
 ## SVM
-Support Vector Machines (SVM) is a powerful machine learning algorithm that can improve accuracy when combined with under-sampling techniques. A soft margin with C=1 was used in this case, which can result in underfitting if many outliers are present. However, in this particular dataset, the number of outliers is relatively low, so the margins remain soft. The SVM model did not show any signs of underfitting, which can be attributed to the smaller number of outliers. The high accuracy achieved by the model is a testament to its effectiveness as a classifier. From the table we can see that SVM had the worst accuracy among all of the models without SMOTE but with it turns to one of the best with very high F1 values for both classes. In an imbalanced dataset, the number of instances in each class is not equal, which can lead to bias towards the majority class. This means that standard SVM may focus on optimizing the decision boundary to maximize the margin around the majority class, while ignoring the minority class. This can result in poor classification performance for the minority class. With SMOTE we get an increase in the F1 value which indicates a larger gap between the support vectors, indicating an increased margin and better separation between the classes. As a result, the SVM model was able to achieve high accuracy, with the support vectors further apart, leading to improved classification. 
+Support Vector Machines (SVM) are a powerful machine learning algorithm that can improve accuracy when combined with undersampling techniques. A soft margin with C=1 was used in this case, which can result in underfitting if many outliers are present. However, in this particular dataset, the number of outliers is relatively low, so the margins remain soft. The SVM model did not show any signs of underfitting, which can be attributed to the smaller number of outliers. The high accuracy achieved by the model is a testament to its effectiveness as a classifier. From the table we can see that SVM had the worst accuracy among all of the models without SMOTE but with it turns to one of the best with very high F1 values for both classes. In an imbalanced dataset, the number of instances in each class is not equal, which can lead to bias towards the majority class. This means that standard SVM may focus on optimizing the decision boundary to maximize the margin around the majority class, while ignoring the minority class. This can result in poor classification performance for the minority class. With SMOTE we get an increase in the F1 value which indicates a larger gap between the support vectors, indicating an increased margin and better separation between the classes. As a result, the SVM model was able to achieve high accuracy, with the support vectors further apart, leading to improved classification.
+
 Nonetheless, it is important to note that the SVM model can be computationally intensive when testing multiple combinations of hyperparameters, so careful consideration of the search space is crucial for optimal efficiency.
 
 SVMs can handle high-dimensional feature spaces, which can include many correlated features. SVMs can find a decision boundary that best separates the classes, even when the data is highly dimensional. This is because SVMs seek to maximize the margin between the classes, which essentially translates to maximizing the distance between the support vectors. As long as the correlation between the features is not too high, SVMs can still work well.
 
 ![Knn, Logistic regression and SVM bootstrapped values respectively](test.jpg)
 
-These graphs shows the accuracy of the optimized SMOTE models by Bootstrapping the models with resampling the dataset by replacement 1000 times. We can see that these accuracies are lower than the ones that we found on the table, but notice that even though Logistic regression has the highest accuracies it performs poorly generally compared to SVM. This shows us that Logistic regression (LR) over fit. The range of values also show that LR is more left skewed than SVM, and SVM constantly performs highly in 'unseen' data. 
+These graphs shows the accuracy of the optimized SMOTE models by Bootstrapping the models with resampling the dataset by replacement 1000 times. We can see that these accuracies are lower than the ones that we found on the table, but notice that even though Logistic regression has the highest accuracies it performs poorly generally compared to SVM. This shows us that Logistic regression (LR) overfit the data. The range of values also show that LR is more left skewed than SVM, and SVM constantly performs highly in 'unseen' data. 
+
 This might be because SVM is more robust to outliers than LR, but is also computationally intensive, so a tradeoff must be done depending on what we value from a model.
 
 ## Decision Tree
@@ -216,18 +218,20 @@ Neural networks in general are good at handling non-linear decision boundaries a
 
 On the other hand, neural networks are usually far more computationally intensive, with our multi-layer perceptron model taking multiple hours of computation to tune hyperparameters. They also have next to no interpretability, making them less suitable for situations where you might want to identify causal relationships as well as classify new data.
 
+A Multi-Layer Perceptron is one of the simplest forms of a neural network; the features form nodes in the input layer and the predicted response forms the single node in the output layer. Then, layers of nodes called the hidden layer(s) are put in between the input and output layers, with each node connected with an edge to every node one layer before and one layer after itself. Then the weights of these edges are randomized and tuned using backpropagation.
+
 Interestingly, both the single-layer perceptron and multi-layer perceptron tuning towards relatively narrow hidden layers (width 5), outcompeting more complex models. It can also be argued that the single-layer perceptron slightly outperforms the multi-layer perceptron, though in any case the difference is very slight.
 
 Larger models also usually require more data to train, so it could be the case that there isn't enough data for the larger models to match the performance of the simpler models. In this case, we can see an application of Occam's Razor, as the simple single-layer perceptron performs as well as any of our other models.
 
 ## Concluding Results 
-From our model we can see that most models are almost give the same accuracy and complex models are not needed for such a dataset. In terms of performance on other bootstrapped data, computational complexity and intelligibility I would fit this dataset with the SVM model, although it is slower than Logistic regression, it performs better on 'unseen' data than LR also, it's its less complex and computationally intensive than trees and Neural Networks, for the same accuracy and fair levels of F1.  
+From our results we can see that most models perform similarly on the testing set, and that complex models are not needed for such a dataset. In terms of predictive power, computational complexity, and intelligibility, we would fit this dataset with the Linear Regression model with SMOTE resampling. It is significantly faster, interpretable, and performs as well as any of the other models on both accuracy and F1 score.
 
 # Discussion
 ## Existing analyses
 The IBM Telco dataset is also popular on Kaggle, including a few high quality analyses. The following link shows 24 other analyses of the same dataset: <https://www.kaggle.com/datasets/yeanzc/telco-customer-churn-ibm-dataset/code>
 
-The vast majority of these analyses are plug-and-play, where default classifiers are run on the dataset, and then the results are analyzed and visualized in many ways. The analyses seem to be mainly focused on visualising and analysis the data to building a single model, rather than comparing different models and preprocessing methods like we have done.
+The vast majority of these analyses are plug-and-play, where default classifiers are run on the dataset, and then the results are analyzed and visualized in many ways. The analyses seem to be mainly focused on visualizing and analyzing the data to building a single model, rather than comparing different models and preprocessing methods like we have done.
 
 Most of the analyses use at least one of Logistic Regression, Naive Bayes, Random Forest, or XGBoost, and most of the hyperparameters are tuned using out of the box tools. Only one analysis used cross-validation at all.
 
@@ -248,6 +252,11 @@ Finally, there may be additional insights to be gleaned from further exploration
 
 \newpage
 # Appendix
+## References
+
+<div id="refs"></div>
+
+## Extra Figures
 
 ![ EDA](eda1.png)
 
@@ -263,13 +272,8 @@ Finally, there may be additional insights to be gleaned from further exploration
 ![EDA](cont_charges.png)
 
 ![Showing where most customers are churning from, a large number of customers from LA](country_usa.png)
+
 ![Figure 9:Showing the number of features selected vs the Cross validation score](features.png)
-
-
-
-## References
-
-<div id="refs"></div>
 
 ## Code
 All of the code below can be found with the submission of this report.
@@ -305,7 +309,7 @@ General purpose Dataset class to unify the loading, preprocessing, and evaluatio
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE, code=readLines("knn.py")}
 ```
 
-### EDA
+### Exploratory Data Analysis (EDA)
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE, code=readLines("eda.py")}
 ```
 
