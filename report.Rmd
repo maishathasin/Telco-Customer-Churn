@@ -171,13 +171,12 @@ The F1 score is computed as $2 \cdot \frac{\text{precision} \cdot \text{recall}}
 Recalling that a response of 1 indicates that a customer has churned, the F1 score for the response of 1 is of importance, as we would like to correctly identify high risk customers (recall) and avoid spending extra resource on low risk customers (precision). Noting also that it is the minority class, it is beneficial to use SMOTE as it increases the performance of the models on the minority class without impacting the overall accuracy much at all.
 
 ## Logistic regression
-<<<<<<< HEAD
+
 We utilized logistic regression as one of our classification model for predicting churn, given its binary nature and speedy computational efficiency. We conducted an in-depth analysis of the model's performance using various techniques such as SMOTE, hyper-parameter tuning, bootstrapped values, and recursive feature elimination to ensure that it can produce reliable results with high accuracy. 
 
 In logistic regression, RFE is used to iteratively remove the least significant features from the feature set until the desired number of features is achieved or until there is no further improvement in the model performance [@Misra_2020]. We can see how from Figure 11 (appendix) how the features change with the cross validation score. We observed that logistic regression performed exceptionally well when SMOTE and RFE was applied, resulting in the highest accuracy scores. This works because logistic regression estimates the coefficients by maximum likelihood estimation (MLE). 
-=======
+
 We utilized logistic regression as one of our classification model for predicting churn, given its binary nature and speedy computational efficiency. We conducted an in-depth analysis of the model's performance using various techniques such as SMOTE, hyper-parameter tuning, bootstrapped values, and recursive feature elimination to ensure that it can produce reliable results with high accuracy. In logistic regression, RFE is used to iteratively remove the least significant features from the feature set until the desired number of features is achieved or until there is no further improvement in the model performance [@Misra_2020]. We can see how from Figure 11 (appendix) how the features change with the cross validation score. We observed that logistic regression performed exceptionally well when SMOTE and RFE was applied, resulting in the highest accuracy scores. This works because logistic regression estimates the coefficients by maximum likelihood estimation (MLE).
->>>>>>> 0127f6da3ecb34fd1279b463223df366d3466e68
 
 MLE is a method that seeks to find the values of the coefficients that maximize the likelihood of observing the data given the model. In other words, it finds the values of the coefficients that make the predicted probabilities of the model as close as possible to the actual values of the outcome variable in the dataset. Combining both approaches by fixing the unbalanced data and using RFE improves the performance of the logistic regression model by reducing bias and identifying the most important features for predicting the outcome variable, leading to a more accurate and robust model. 
 
@@ -193,7 +192,7 @@ Our experimentation revealed that the "curse of dimensionality" did not affect o
 Although KNN is a powerful algorithm, it is computationally intensive, making it less suitable for large datasets. In our exploratory data analysis (EDA), we noted that the number of outliers was relatively low, leading to favorable accuracy. However, the algorithm was not very robust, suggesting that it may not perform well with a significant number of outliers in the future.
 
 ## SVM
-<<<<<<< HEAD
+
 Support Vector Machines (SVM) are a powerful machine learning algorithm that can improve accuracy when combined with undersampling techniques. A soft margin with C=1 was used in this case, which can result in underfitting if many outliers are present. However, in this particular dataset, the number of outliers is relatively low, so the margins remain soft. The SVM model did not show any signs of underfitting, which can be attributed to the smaller number of outliers. 
 
 The high accuracy achieved by the model is a testament to its effectiveness as a classifier. From the table we can see that SVM had the worst accuracy among all of the models without SMOTE but with it turns to one of the best with very high F1 values for both classes. In an imbalanced dataset, the number of instances in each class is not equal, which can lead to bias towards the majority class. This means that standard SVM may focus on optimizing the decision boundary to maximize the margin around the majority class, while ignoring the minority class. This can result in poor classification performance for the minority class. With SMOTE we get an increase in the F1 value which indicates a larger gap between the support vectors, indicating an increased margin and better separation between the classes. As a result, the SVM model was able to achieve high accuracy, with the support vectors further apart, leading to improved classification.
@@ -236,6 +235,7 @@ Larger models also usually require more data to train, so it could be the case t
 ## Concluding Results 
 From our results we can see that most models perform similarly on the testing set, and that complex models are not needed for such a dataset. In terms of predictive power, computational complexity, and intelligibility, we would fit this dataset with the Linear Regression model with SMOTE resampling. It is significantly faster, interpretable, and performs as well as any of the other models on both accuracy and F1 score.
 
+\newpage
 # Discussion
 ## Existing analyses
 The IBM Telco dataset is also popular on Kaggle, including a few high quality analyses. The following link shows 24 other analyses of the same dataset: <https://www.kaggle.com/datasets/yeanzc/telco-customer-churn-ibm-dataset/code>
